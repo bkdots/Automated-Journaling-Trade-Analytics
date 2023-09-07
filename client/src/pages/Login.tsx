@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {CognitoUser, AuthenticationDetails} from "amazon-cognito-identity-js";
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,14 +13,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import UserPool from "../UserPool";
+import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
 
 interface CopyrightProps {
     [key: string]: any;
 }
 
-// TODO add displaying if wrong or good
-// TODO Add attributes
-// TODO fix navigation
 function Copyright(props: CopyrightProps) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -35,11 +32,13 @@ function Copyright(props: CopyrightProps) {
     );
 }
 
-const Signup: React.FC = () => {
+
+const Login = () => {
+
     const navigate = useNavigate();
 
     // useEffect(() => {
-    //     const user = JSON.parse(localStorage.getItem("userInfo") || "null");
+    //     const user = JSON.parse(localStorage.getItem("userInfo"));
     //     if (user) navigate('/dashboard');
     // }, [navigate]);
 
@@ -49,22 +48,36 @@ const Signup: React.FC = () => {
 
         const email = data.get('email');
         const password = data.get('password');
-        const name = `${data.get("firstName")} ${data.get("lastName")}`;
 
-        console.log({name, email, password});
+        console.log({email, password});
+
 
         if (typeof email === 'string' && typeof password === 'string') {
-            UserPool.signUp(email, password, [], [], (err, data) => {
-                if (err) {
-                    console.error(err);
-                }
-                console.log(data);
+            const user = new CognitoUser({
+                Username: email,
+                Pool: UserPool
+            });
+
+            const authDetails = new AuthenticationDetails({
+                Username: email,
+                Password: password
+            });
+
+            user.authenticateUser(authDetails, {
+                onSuccess: (data) => {
+                    console.log("onSuccess: ", data);
+                },
+                onFailure: (err) => {
+                    console.log("onFailure: ", err);
+                },
+                newPasswordRequired: (data) => {
+                    console.log("newPasswordRequired: ", data);
+                },
             });
         } else {
             console.error("Invalid email or password format");
         }
     };
-
 
     return (
         <Container component="main" maxWidth="xs">
@@ -81,58 +94,58 @@ const Signup: React.FC = () => {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    Sign in
                 </Typography>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="new-password"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
-                            />
-                        </Grid>
-                    </Grid>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary"/>}
+                        label="Remember me"
+                    />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
                     >
-                        Sign Up
+                        Sign In
                     </Button>
-                    <Grid container justifyContent="flex-end">
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
                         <Grid item>
                             <Link href="#" variant="body2">
-                                Already have an account? Sign in
+                                {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
                     </Grid>
                 </Box>
             </Box>
-            <Copyright sx={{mt: 5}}/>
+            <Copyright sx={{mt: 8, mb: 4}}/>
         </Container>
     );
 }
 
-export default Signup;
+export default Login;
