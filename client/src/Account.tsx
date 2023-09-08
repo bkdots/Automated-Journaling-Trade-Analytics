@@ -8,28 +8,50 @@ interface IContext {
     logout: () => void;
 }
 
+interface SessionResult {
+    user: any;
+    [key: string]: any;
+}
+
 const AccountContext = createContext<IContext | undefined>(undefined);
 
 interface Props {
     children: React.ReactNode;
 }
 const Account: React.FC<Props> = (props) => {
-    const getSession = async () => {
-        return await new Promise((resolve, reject) => {
+    const getSession = async (): Promise<SessionResult> => {
+        return await new Promise<SessionResult>((resolve, reject) => {
             const user = Pool.getCurrentUser();
             if (user) {
-                user.getSession((err: any, session: any) => {
+                user.getSession(async (err: any, session: any) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(session);
+                        user.getUserAttributes((err, attributes) => {
+                            if (err) {
+                                reject(err);
+                            } else if (attributes) {
+                                const results: { [key: string]: string } = {};
+
+                                for (let attribute of attributes) {
+                                    const { Name, Value } = attribute;
+                                    if (Name && Value) {
+                                        results[Name] = Value;
+                                    }
+                                }
+                                resolve({ user, ...session, ...results });
+                            } else {
+                                reject("Attributes are undefined");
+                            }
+                        });
                     }
                 });
             } else {
                 reject("User not logged in");
             }
-        })
+        });
     };
+
     const authenticate = async (Username: string, Password: string) => {
         return await new Promise((resolve, reject) => {
             const user = new CognitoUser({ Username, Pool });
