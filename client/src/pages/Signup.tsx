@@ -22,6 +22,7 @@ interface CopyrightProps {
 // TODO add displaying if wrong or good
 // TODO Add attributes
 // TODO fix navigation
+// TODO add redirects
 function Copyright(props: CopyrightProps) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -49,9 +50,8 @@ const Signup: React.FC = () => {
 
         const email = data.get('email');
         const password = data.get('password');
-        const name = `${data.get("firstName")} ${data.get("lastName")}`;
 
-        console.log({name, email, password});
+        console.log({email, password});
 
         if (typeof email === 'string' && typeof password === 'string') {
             UserPool.signUp(email, password, [], [], (err, data) => {

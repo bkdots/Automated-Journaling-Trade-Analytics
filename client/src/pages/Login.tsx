@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import { AccountContext } from "../Account";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -42,6 +43,14 @@ const Login = () => {
     //     if (user) navigate('/dashboard');
     // }, [navigate]);
 
+    const contextValue = useContext(AccountContext);
+
+    if (!contextValue) {
+        throw new Error("Login must be used within an AccountProvider");
+    }
+
+    const { authenticate } = contextValue;
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -52,28 +61,36 @@ const Login = () => {
         console.log({email, password});
 
 
+
         if (typeof email === 'string' && typeof password === 'string') {
-            const user = new CognitoUser({
-                Username: email,
-                Pool: UserPool
-            });
-
-            const authDetails = new AuthenticationDetails({
-                Username: email,
-                Password: password
-            });
-
-            user.authenticateUser(authDetails, {
-                onSuccess: (data) => {
-                    console.log("onSuccess: ", data);
-                },
-                onFailure: (err) => {
-                    console.log("onFailure: ", err);
-                },
-                newPasswordRequired: (data) => {
-                    console.log("newPasswordRequired: ", data);
-                },
-            });
+            authenticate(email, password)
+                .then(data => {
+                    console.log("Logged in", data)
+                })
+                .catch(err => {
+                    console.error("Failed to login", err);
+                })
+        //     const user = new CognitoUser({
+        //         Username: email,
+        //         Pool: UserPool
+        //     });
+        //
+        //     const authDetails = new AuthenticationDetails({
+        //         Username: email,
+        //         Password: password
+        //     });
+        //
+        //     user.authenticateUser(authDetails, {
+        //         onSuccess: (data) => {
+        //             console.log("onSuccess: ", data);
+        //         },
+        //         onFailure: (err) => {
+        //             console.log("onFailure: ", err);
+        //         },
+        //         newPasswordRequired: (data) => {
+        //             console.log("newPasswordRequired: ", data);
+        //         },
+        //     });
         } else {
             console.error("Invalid email or password format");
         }
