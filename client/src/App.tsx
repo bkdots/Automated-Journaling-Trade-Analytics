@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import { Account } from "./Account";
-import Status from "./Status";
-import Settings from "./Settings";
+import Signup from "./pages/auth/Signup";
+import Login from "./pages/auth/Login";
+import { Account } from "./context/Account";
+import Status from "./pages/Status";
+import Settings from "./pages/Settings";
 
 function App() {
   return (

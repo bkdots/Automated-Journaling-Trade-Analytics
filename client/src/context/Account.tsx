@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-import Pool from "./UserPool";
+import Pool from "../UserPool";
 
 interface IContext {
     authenticate: (Username: string, Password: string) => Promise<unknown>;

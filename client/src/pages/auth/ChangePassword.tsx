@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
-import { AccountContext } from "./Account";
-import {Session} from "inspector";
+import { AccountContext } from "../../context/Account";
 
 interface SessionResult {
     user: any;
