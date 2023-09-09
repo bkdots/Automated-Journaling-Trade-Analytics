@@ -1,11 +1,14 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import Pool from "../UserPool";
+import {Session} from "inspector";
 
 interface IContext {
     authenticate: (Username: string, Password: string) => Promise<unknown>;
     getSession: () => Promise<unknown>;
     logout: () => void;
+    session: SessionResult | null;
+    setSession: React.Dispatch<React.SetStateAction<SessionResult | null>>;
 }
 
 interface SessionResult {
@@ -19,6 +22,8 @@ interface Props {
     children: React.ReactNode;
 }
 const Account: React.FC<Props> = (props) => {
+    const [session, setSession] = useState<SessionResult | null>(null);
+
     const getSession = async (): Promise<SessionResult> => {
         return await new Promise<SessionResult>((resolve, reject) => {
             const user = Pool.getCurrentUser();
@@ -39,6 +44,7 @@ const Account: React.FC<Props> = (props) => {
                                         results[Name] = Value;
                                     }
                                 }
+                                setSession({ user, ...session, ...results })
                                 resolve({ user, ...session, ...results });
                             } else {
                                 reject("Attributes are undefined");
@@ -47,7 +53,8 @@ const Account: React.FC<Props> = (props) => {
                     }
                 });
             } else {
-                reject("User not logged in");
+                // TODO fix this to reject
+                console.log("User not logged in");
             }
         });
     };
@@ -83,7 +90,7 @@ const Account: React.FC<Props> = (props) => {
     };
 
     return (
-        <AccountContext.Provider value={{ authenticate, getSession, logout }}>
+        <AccountContext.Provider value={{ authenticate, getSession, logout, session, setSession }}>
             {props.children}
         </AccountContext.Provider>
     );

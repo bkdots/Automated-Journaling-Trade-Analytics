@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { AccountContext } from "../context/Account";
-import ChangePassword from "./auth/ChangePassword";
-import ChangeEmail from "./auth/ChangeEmail";
+import UserDetailsChangeForm from "./auth/UserDetailsChangeForm";
 
 export default () => {
     const contextValue = useContext(AccountContext);
@@ -25,8 +24,8 @@ export default () => {
             {loggedIn && (
                 <>
                     <h2>Settings</h2>
-                    <ChangePassword />
-                    <ChangeEmail />
+                    <UserDetailsChangeForm mode="password" />
+                    <UserDetailsChangeForm mode="email" />
                 </>
             )}
         </div>

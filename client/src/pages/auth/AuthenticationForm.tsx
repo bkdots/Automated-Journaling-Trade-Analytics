@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { AccountContext } from "../../context/Account";
+import React, {useContext, useEffect} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,12 +13,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import UserPool from "../../UserPool";
-import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
+import {AccountContext} from "../../context/Account";
 
 interface CopyrightProps {
     [key: string]: any;
 }
 
+// TODO add displaying if wrong or good
+// TODO Add attributes
 function Copyright(props: CopyrightProps) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -32,72 +33,54 @@ function Copyright(props: CopyrightProps) {
         </Typography>
     );
 }
+interface AuthProps {
+    mode: "signup" | "login";
+}
 
-
-const Login = () => {
-
+const AuthenticationForm: React.FC<AuthProps> = ({ mode }) => {
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     const user = JSON.parse(localStorage.getItem("userInfo"));
-    //     if (user) navigate('/dashboard');
-    // }, [navigate]);
-
     const contextValue = useContext(AccountContext);
-
-    if (!contextValue) {
+    if (!contextValue && mode === "login") {
         throw new Error("Login must be used within an AccountProvider");
     }
+    const { authenticate, session } = contextValue || {};
 
-    const { authenticate } = contextValue;
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>)=> {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        const email = data.get('email');
-        const password = data.get('password');
+        const email = data.get('email') as string;
+        const password = data.get('password') as string;
 
-        console.log({email, password});
-
-
-
-        if (typeof email === 'string' && typeof password === 'string') {
+        if (mode === "signup") {
+            UserPool.signUp(email, password, [], [], (err, data) => {
+                if (err) {
+                    console.error(err);
+                }
+                console.log(data);
+                navigate('/dashboard');
+            });
+        } else if (mode === "login" && authenticate) {
             authenticate(email, password)
                 .then(data => {
-                    console.log("Logged in", data)
+                    console.log("Logged in", data);
+                    navigate('/dashboard');
                 })
                 .catch(err => {
                     console.error("Failed to login", err);
                 })
-        //     const user = new CognitoUser({
-        //         Username: email,
-        //         Pool: UserPool
-        //     });
-        //
-        //     const authDetails = new AuthenticationDetails({
-        //         Username: email,
-        //         Password: password
-        //     });
-        //
-        //     user.authenticateUser(authDetails, {
-        //         onSuccess: (data) => {
-        //             console.log("onSuccess: ", data);
-        //         },
-        //         onFailure: (err) => {
-        //             console.log("onFailure: ", err);
-        //         },
-        //         newPasswordRequired: (data) => {
-        //             console.log("newPasswordRequired: ", data);
-        //         },
-        //     });
-        } else {
-            console.error("Invalid email or password format");
         }
-    };
+    }
+
+    useEffect(() => {
+        if (session) {
+            navigate('/dashboard');
+        }
+    }, [navigate, session]);
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container>
             <CssBaseline/>
             <Box
                 sx={{
@@ -111,7 +94,7 @@ const Login = () => {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    {mode === "signup" ? "Sign up" : "Login"}
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                     <TextField
@@ -144,7 +127,7 @@ const Login = () => {
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
                     >
-                        Sign In
+                        {mode === "signup" ? "Sign up" : "Login"}
                     </Button>
                     <Grid container>
                         <Grid item xs>
@@ -165,4 +148,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default AuthenticationForm;
