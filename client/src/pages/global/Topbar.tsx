@@ -1,11 +1,13 @@
 import { Box, IconButton, useTheme } from "@mui/material";
 import { useContext } from "react";
-import { ColorModeContext, tokens } from "../../theme";
+import { ColorModeContext, tokens } from "../../context/theme";
+import { VisibleModeContext } from "../../context/visible";
+import AccountMenu from "../../components/AccountMenu";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -13,6 +15,7 @@ const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+    const visibilityMode = useContext(VisibleModeContext);
 
     return (
         <Box display="flex" justifyContent="space-between" p={2}>
@@ -39,15 +42,14 @@ const Topbar = () => {
                         <LightModeOutlinedIcon />
                     )}
                 </IconButton>
-                <IconButton>
-                    <NotificationsOutlinedIcon />
+                <IconButton onClick={visibilityMode.toggleVisibility}>
+                    {visibilityMode.isVisible ? (
+                        <VisibilityOutlinedIcon />
+                    ) : (
+                        <VisibilityOffOutlinedIcon />
+                    )}
                 </IconButton>
-                <IconButton>
-                    <SettingsOutlinedIcon />
-                </IconButton>
-                <IconButton>
-                    <PersonOutlinedIcon />
-                </IconButton>
+                <AccountMenu />
             </Box>
         </Box>
     );
