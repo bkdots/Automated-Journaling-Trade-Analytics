@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { AccountContext } from "../context/Account";
 import UserDetailsChangeForm from "./auth/UserDetailsChangeForm";
 
-export default () => {
+const Settings = () => {
     const contextValue = useContext(AccountContext);
 
     if (!contextValue) {
@@ -31,3 +31,5 @@ export default () => {
         </div>
     )
 };
+
+export default Settings;
