@@ -10,16 +10,35 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import {useContext} from "react";
+import {AccountContext} from "../context/Account";
+import {useNavigate} from "react-router-dom";
 
 export default function AccountMenu() {
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
+    const contextValue = useContext(AccountContext);
+    if (!contextValue) {
+        throw new Error("Get session must be used within an AccountProvider");
+    }
+    const { logout } = contextValue;
+
+    const handleLogout = () => {
+        logout();
+        handleClose();
+        navigate('/');
+    }
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -83,7 +102,7 @@ export default function AccountMenu() {
                     Settings
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout />
                     </ListItemIcon>
