@@ -6,7 +6,6 @@ import {CssBaseline, ThemeProvider} from "@mui/material";
 import AuthenticationForm from "./pages/auth/AuthenticationForm";
 import {Account} from "./context/Account";
 import Status from "./pages/Status";
-import Settings from "./pages/Settings";
 import Topbar from "./pages/global/Topbar";
 import Sidebar from "./pages/global/Sidebar";
 import Dashboard from "./pages/dashboard";
@@ -27,11 +26,10 @@ function App() {
                                 <Topbar/>
                                 <Status/>
                                 <Routes>
-                                    <Route path="/dashboard" element={<Dashboard/>}/>
+                                    <Route path="/dashboard/*" element={<Dashboard/>}/>
                                     <Route path="/signup" element={<AuthenticationForm mode="signup"/>}/>
                                     <Route path="/login" element={<AuthenticationForm mode="login"/>}/>
                                 </Routes>
-                                <Settings/>
                             </Account>
                         </main>
                     </div>

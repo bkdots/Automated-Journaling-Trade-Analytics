@@ -31,6 +31,10 @@ export default function AccountMenu() {
         navigate('/');
     }
 
+    const handleSettings = () => {
+        navigate('/dashboard/settings')
+    }
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -95,7 +99,7 @@ export default function AccountMenu() {
                     Upgrade Account
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleSettings}>
                     <ListItemIcon>
                         <Settings />
                     </ListItemIcon>
