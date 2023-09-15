@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 export type Currency = "USD" | "CAD" | "GBP" | "EUR";
 

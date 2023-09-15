@@ -12,7 +12,7 @@ import Logout from '@mui/icons-material/Logout';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {useContext} from "react";
 import {AccountContext} from "../context/Account";
-import {useNavigate, Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export default function AccountMenu() {
     const navigate = useNavigate();
