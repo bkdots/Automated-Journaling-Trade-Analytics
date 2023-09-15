@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Header from "../../components/Header"
 import { Box } from "@mui/material";
-import Settings from "../Settings";
+import Settings from "../auth/Settings";
 
 const Dashboard = () => {
 

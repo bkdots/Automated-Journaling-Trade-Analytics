@@ -15,6 +15,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import CurrencyDropDown from "../../components/CurrencyDropdown";
 
 type ItemProps = {
     title: string;
@@ -28,17 +29,18 @@ const Item: React.FC<ItemProps> = ({ title, to, icon, selected, setSelected }) =
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
-        <MenuItem
-            active={selected === title}
-            style={{
-                color: colors.grey[100],
-            }}
-            onClick={() => setSelected(title)}
-            icon={icon}
-        >
-            <Typography>{title}</Typography>
-            <Link to={to} />
-        </MenuItem>
+        <Link to={to} style={{ textDecoration: 'none' }}>
+            <MenuItem
+                active={selected === title}
+                style={{
+                    color: colors.grey[100],
+                }}
+                onClick={() => setSelected(title)}
+                icon={icon}
+            >
+                <Typography>{title}</Typography>
+            </MenuItem>
+        </Link>
     );
 };
 
@@ -117,7 +119,7 @@ const Sidebar = () => {
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
                         <Item
                             title="Dashboard"
-                            to="/"
+                            to="/dashboard"
                             icon={<HomeOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -216,6 +218,7 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+                        <CurrencyDropDown />
                     </Box>
                 </Menu>
             </ProSidebar>

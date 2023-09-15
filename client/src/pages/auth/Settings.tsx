@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
-import { AccountContext } from "../context/Account";
-import UserDetailsChangeForm from "./auth/UserDetailsChangeForm";
+import { AccountContext } from "../../context/Account";
+import UserDetailsChangeForm from "./UserDetailsChangeForm";
 
 const Settings = () => {
     const contextValue = useContext(AccountContext);
