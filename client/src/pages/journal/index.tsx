@@ -1,18 +1,14 @@
-import { useLocation } from 'react-router-dom';
 import { Box } from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 
 const Journal = () => {
-    const location = useLocation();
-
-    const currentTabIndex = location.pathname.includes('tags') ? 1 : 0;
 
     return (
         <Box m="20px">
             <TabsComponent
                 tabs={[
-                    { label: "Item One", content: <div>Content for Item One</div>, route: "item-one" },
-                    { label: "Item Two", content: <div>Content for Item Two</div>, route: "item-two"},
+                    { label: "Journals", content: <div>Content for Item One</div>, route: "journals" },
+                    { label: "Tags", content: <div>Content for Item Two</div>, route: "tags"},
                 ]}
             />
         </Box>

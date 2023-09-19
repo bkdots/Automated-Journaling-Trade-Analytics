@@ -59,6 +59,12 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
         navigate(`?tab=${tabs[newValue].route}`);
     };
 
+    React.useEffect(() => {
+        if (!currentTabRoute) {
+            navigate(`?tab=${tabs[0].route}`);
+        }
+    }, [currentTabRoute, navigate, tabs]);
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
