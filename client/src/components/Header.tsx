@@ -1,12 +1,14 @@
 import { Typography, Box, useTheme } from "@mui/material";
 import { tokens } from "../context/theme";
+import React from "react";
 
 type HeaderProps = {
     title: string;
     subtitle: string;
+    headerContent?: React.ReactNode;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
+const Header: React.FC<HeaderProps> = ({ title, subtitle, headerContent }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
@@ -22,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
             <Typography variant="h5" color={colors.greenAccent[400]}>
                 {subtitle}
             </Typography>
+            {headerContent}
         </Box>
     );
 };

@@ -1,7 +1,26 @@
-import { Box } from "@mui/material";
+import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
+import {useHeaderContent} from "../../context/HeaderContent";
+import React from "react";
 
 const Journal = () => {
+    const setHeaderContent = useHeaderContent();
+
+    React.useEffect(() => {
+        if (setHeaderContent) { // Check if the function is not null
+            const content = (
+                <>
+                    <Button onClick={() => console.log("Clicked!")}>+ Add Journal</Button>
+                    <span>Total Money: $5000</span>
+                    // Any other components you want
+                </>
+            );
+            setHeaderContent(content);
+
+            // Cleanup
+            return () => setHeaderContent(null);
+        }
+    }, [setHeaderContent]);
 
     return (
         <Box m="20px">

@@ -5,7 +5,6 @@ import {VisibleModeContext, useVisibility} from "./context/visible";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import AuthenticationForm from "./pages/auth/AuthenticationForm";
 import {Account} from "./context/Account";
-import Status from "./pages/Status";
 import Topbar from "./pages/global/Topbar";
 import Sidebar from "./pages/global/Sidebar";
 import Dashboard from "./pages/dashboard";
@@ -26,7 +25,6 @@ function App() {
                             <main className="content">
                                 <Account>
                                     <Topbar/>
-                                    <Status/>
                                     <Routes>
                                         <Route path="/dashboard/*" element={<Dashboard/>}/>
                                         <Route path="/signup" element={<AuthenticationForm mode="signup"/>}/>
