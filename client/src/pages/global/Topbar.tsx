@@ -8,7 +8,6 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 
 const Topbar = () => {
