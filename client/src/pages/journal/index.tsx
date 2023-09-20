@@ -12,7 +12,6 @@ const Journal = () => {
                 <>
                     <Button onClick={() => console.log("Clicked!")}>+ Add Journal</Button>
                     <span>Total Money: $5000</span>
-                    // Any other components you want
                 </>
             );
             setHeaderContent(content);
