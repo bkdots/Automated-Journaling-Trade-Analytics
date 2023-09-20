@@ -7,7 +7,7 @@ const Journal = () => {
     const setHeaderContent = useHeaderContent();
 
     React.useEffect(() => {
-        if (setHeaderContent) { // Check if the function is not null
+        if (setHeaderContent) {
             const content = (
                 <>
                     <Button onClick={() => console.log("Clicked!")}>+ Add Journal</Button>
@@ -17,7 +17,6 @@ const Journal = () => {
             );
             setHeaderContent(content);
 
-            // Cleanup
             return () => setHeaderContent(null);
         }
     }, [setHeaderContent]);

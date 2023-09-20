@@ -53,7 +53,8 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
     const navigate = useNavigate();
 
     const currentTabRoute = new URLSearchParams(location.search).get("tab");
-    const value = tabs.findIndex(tab => tab.route === currentTabRoute) || 0;
+    const value = tabs.findIndex(tab => tab.route === currentTabRoute);
+    const activeValue = value !== -1 ? value : 0;
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         navigate(`?tab=${tabs[newValue].route}`);
@@ -68,7 +69,7 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tabs value={activeValue} onChange={handleChange} aria-label="basic tabs example">
                     {tabs.map((tab, index) => (
                         <Tab key={index} label={tab.label} {...a11yProps(index)} />
                     ))}

@@ -12,6 +12,7 @@ const Dashboard = () => {
     let title = "DASHBOARD";
     let subtitle = "Welcome to your dashboard";
 
+    // TODO add into header content context
     if (location.pathname.includes('journals')) {
         title = "JOURNALS";
         subtitle = "Your Journals";
@@ -20,6 +21,7 @@ const Dashboard = () => {
         subtitle = "Your settings page";
     }
 
+    // TODO move header content provider into header
     return (
         <HeaderContentProvider>
             {(headerContent: React.ReactNode) => (
