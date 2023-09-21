@@ -1,4 +1,4 @@
-import { Typography, Box, useTheme } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import { tokens } from "../context/theme";
 import React from "react";
 import Grid from "@mui/material/Grid";

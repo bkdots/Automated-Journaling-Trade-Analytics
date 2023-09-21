@@ -21,7 +21,6 @@ const Dashboard = () => {
         subtitle = "Your settings page";
     }
 
-    // TODO move header content provider into header
     return (
         <HeaderContentProvider>
             {(headerContent: React.ReactNode) => (
