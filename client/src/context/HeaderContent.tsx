@@ -2,7 +2,6 @@ import React, { useContext, useState, Dispatch, SetStateAction, ReactNode } from
 
 type HeaderContentType = ReactNode;
 type SetHeaderContentType = Dispatch<SetStateAction<HeaderContentType | null>>;
-
 const HeaderContentContext = React.createContext<SetHeaderContentType | null>(null);
 
 export const useHeaderContent = () => {
