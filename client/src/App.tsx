@@ -20,9 +20,9 @@ function App() {
                 <CurrencyProvider>
                     <ThemeProvider theme={theme}>
                         <CssBaseline/>
-                        <div className="App">
+                        <div className="App" style={{ display: "flex" }}>
                             <Sidebar/>
-                            <main className="content">
+                            <main className="content" style={{ flex: 1 }}>
                                 <Account>
                                     <Topbar/>
                                     <Routes>
