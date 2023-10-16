@@ -3,16 +3,7 @@ import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
 import ItemForm from "./ItemForm";
-
-type JournalType = {
-    name: string;
-    description: string;
-}
-
-type TagType = {
-    name: string;
-    tagCategory: 'setup' | 'mistake';
-}
+import { JournalType, TagType } from '../../types/types';
 
 const Journal = () => {
     const [journals, setJournals] = useState<JournalType[]>([]);
@@ -27,6 +18,7 @@ const Journal = () => {
         setShowForm(true);
     };
 
+    // TODO handle saving into database
     const handleSave = (item: JournalType | TagType) => {
         console.log(item);
         if (selectedTab === 'journals') {
@@ -41,6 +33,7 @@ const Journal = () => {
         setShowForm(false);
     };
 
+    // TODO handle editing a journal
     const handleSelectJournal = (journal: JournalType) => {
         //...
     };

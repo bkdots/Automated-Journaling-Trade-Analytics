@@ -1,15 +1,6 @@
 import React, {FC, useState } from "react";
 import { Box, TextField, Button, MenuItem } from '@mui/material';
-
-type JournalType = {
-    name: string;
-    description: string;
-}
-
-type TagType = {
-    name: string;
-    tagCategory: 'setup' | 'mistake';
-}
+import { JournalType, TagType } from '../../types/types';
 
 interface ItemFormProps {
     type: 'journal' | 'tag';
