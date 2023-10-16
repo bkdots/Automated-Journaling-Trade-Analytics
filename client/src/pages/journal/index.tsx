@@ -16,11 +16,33 @@ const Journal = () => {
     const setHeaderContent = useHeaderContent();
     const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
 
+    const handleAddJournal = () => {
+        setSelectedJournal(null);
+        setShowForm(true);
+    };
+
+    const handleSaveJournal = (journal: JournalType) => {
+        if (!selectedJournal) {
+            setJournals(prev => [...prev, journal]);
+        } else {
+            // Update existing journal in the 'journals' state
+        }
+        setShowForm(false);
+    }
+
+    const handleCancelJournal = () => {
+        setShowForm(false);
+    };
+
+    const handleSelectJournal = (journal: JournalType) => {
+        //...
+    };
+
     React.useEffect(() => {
         if (setHeaderContent) {
             const content = selectedTab === "journals" ? (
                 <>
-                    <Button onClick={() => console.log("Handle Add Tag here!")}>+ Add Journal</Button>
+                    <Button onClick={handleAddJournal}>+ Add Journal</Button>
                     <span>Total Money: $5000</span>
                 </>
             ) : (
@@ -54,6 +76,13 @@ const Journal = () => {
                     },
                 ]}
             />
+            {showForm && (
+                <JournalCardForm
+                    existingJournal={selectedJournal}
+                    onSave={handleSaveJournal}
+                    onCancel={handleCancelJournal}
+                />
+            )}
         </Box>
     );
 };
