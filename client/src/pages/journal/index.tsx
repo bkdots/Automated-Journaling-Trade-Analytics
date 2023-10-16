@@ -2,35 +2,42 @@ import React, { useState } from "react";
 import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
-import JournalCardForm from "./JournalCardForm";
+import ItemForm from "./ItemForm";
 
 type JournalType = {
     name: string;
     description: string;
 }
 
+type TagType = {
+    name: string;
+    tagCategory: 'setup' | 'mistake';
+}
+
 const Journal = () => {
     const [journals, setJournals] = useState<JournalType[]>([]);
+    const [tags, setTags] = useState<TagType[]>([]);
     const [showForm, setShowForm] = useState(false);
-    const [selectedJournal, setSelectedJournal] = useState<JournalType | null>(null);
+    const [selectedItem, setSelectedItem] = useState<JournalType | TagType | undefined>();
     const setHeaderContent = useHeaderContent();
     const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
 
-    const handleAddJournal = () => {
-        setSelectedJournal(null);
+    const handleAddItem = () => {
+        setSelectedItem(undefined);
         setShowForm(true);
     };
 
-    const handleSaveJournal = (journal: JournalType) => {
-        if (!selectedJournal) {
-            setJournals(prev => [...prev, journal]);
+    const handleSave = (item: JournalType | TagType) => {
+        console.log(item);
+        if (selectedTab === 'journals') {
+            setJournals(prev => [...prev, item as JournalType]);
         } else {
-            // Update existing journal in the 'journals' state
+            setTags(prev => [...prev, item as TagType]);
         }
         setShowForm(false);
     }
 
-    const handleCancelJournal = () => {
+    const handleCancel = () => {
         setShowForm(false);
     };
 
@@ -42,12 +49,12 @@ const Journal = () => {
         if (setHeaderContent) {
             const content = selectedTab === "journals" ? (
                 <>
-                    <Button onClick={handleAddJournal}>+ Add Journal</Button>
+                    <Button onClick={handleAddItem}>+ Add Journal</Button>
                     <span>Total Money: $5000</span>
                 </>
             ) : (
                 <>
-                    <Button onClick={() => console.log("Handle Add Tag here!")}>+ Add Tag</Button>
+                    <Button onClick={handleAddItem}>+ Add Tag</Button>
                     <span>Total Tags: 5</span>
                 </>
             );
@@ -66,21 +73,28 @@ const Journal = () => {
                         label: "Journals",
                         content: <div>Content for Item One</div>,
                         route: "journals",
-                        onClick: () => setSelectedTab("journals")
+                        onClick: () => {
+                            setSelectedTab("journals");
+                            setShowForm(false);
+                        }
                     },
                     {
                         label: "Tags",
                         content: <div>Content for Item Two</div>,
                         route: "tags",
-                        onClick: () => setSelectedTab("tags")
+                        onClick: () => {
+                            setSelectedTab("tags")
+                            setShowForm(false);
+                        }
                     },
                 ]}
             />
             {showForm && (
-                <JournalCardForm
-                    existingJournal={selectedJournal}
-                    onSave={handleSaveJournal}
-                    onCancel={handleCancelJournal}
+                <ItemForm
+                    type={selectedTab === 'journals' ? 'journal' : 'tag'}
+                    existingItem={selectedItem}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
                 />
             )}
         </Box>
