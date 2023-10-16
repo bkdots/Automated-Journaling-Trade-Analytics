@@ -15,6 +15,7 @@ interface TabData {
     label: string;
     content: React.ReactNode;
     route: string;
+    onClick?: () => void;
 }
 
 interface TabsComponentProps {
@@ -71,7 +72,7 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={activeValue} onChange={handleChange} aria-label="basic tabs example">
                     {tabs.map((tab, index) => (
-                        <Tab key={index} label={tab.label} {...a11yProps(index)} />
+                        <Tab key={index} label={tab.label} onClick={tab.onClick} {...a11yProps(index)} />
                     ))}
                 </Tabs>
             </Box>

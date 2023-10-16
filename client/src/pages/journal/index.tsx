@@ -1,31 +1,57 @@
+import React, { useState } from "react";
 import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
-import React from "react";
+import JournalCardForm from "./JournalCardForm";
+
+type JournalType = {
+    name: string;
+    description: string;
+}
 
 const Journal = () => {
+    const [journals, setJournals] = useState<JournalType[]>([]);
+    const [showForm, setShowForm] = useState(false);
+    const [selectedJournal, setSelectedJournal] = useState<JournalType | null>(null);
     const setHeaderContent = useHeaderContent();
+    const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
 
     React.useEffect(() => {
         if (setHeaderContent) {
-            const content = (
+            const content = selectedTab === "journals" ? (
                 <>
-                    <Button onClick={() => console.log("Clicked!")}>+ Add Journal</Button>
+                    <Button onClick={() => console.log("Handle Add Tag here!")}>+ Add Journal</Button>
                     <span>Total Money: $5000</span>
                 </>
+            ) : (
+                <>
+                    <Button onClick={() => console.log("Handle Add Tag here!")}>+ Add Tag</Button>
+                    <span>Total Tags: 5</span>
+                </>
             );
+
             setHeaderContent(content);
 
             return () => setHeaderContent(null);
         }
-    }, [setHeaderContent]);
+    }, [setHeaderContent, selectedTab]);
 
     return (
         <Box m="20px">
             <TabsComponent
                 tabs={[
-                    { label: "Journals", content: <div>Content for Item One</div>, route: "journals" },
-                    { label: "Tags", content: <div>Content for Item Two</div>, route: "tags"},
+                    {
+                        label: "Journals",
+                        content: <div>Content for Item One</div>,
+                        route: "journals",
+                        onClick: () => setSelectedTab("journals")
+                    },
+                    {
+                        label: "Tags",
+                        content: <div>Content for Item Two</div>,
+                        route: "tags",
+                        onClick: () => setSelectedTab("tags")
+                    },
                 ]}
             />
         </Box>
