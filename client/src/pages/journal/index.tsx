@@ -4,10 +4,21 @@ import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
 import ItemForm from "./ItemForm";
 import { JournalType, TagType } from '../../types/types';
+import {Tag} from "styled-components/native/dist/sheet/types";
 
 const Journal = () => {
-    const [journals, setJournals] = useState<JournalType[]>([]);
-    const [tags, setTags] = useState<TagType[]>([]);
+    const FAKE_JOURNALS = [
+        { name: 'Journal 1', description: 'Description for Journal 1' },
+        { name: 'Journal 2', description: 'Description for Journal 2' },
+    ];
+
+    const FAKE_TAGS: TagType[] = [
+        { name: 'Tag 1', tagCategory: 'setup' },
+        { name: 'Tag 2', tagCategory: 'mistake' },
+    ];
+
+    const [journals, setJournals] = useState<JournalType[]>(FAKE_JOURNALS);
+    const [tags, setTags] = useState<TagType[]>(FAKE_TAGS);
     const [showForm, setShowForm] = useState(false);
     const [selectedItem, setSelectedItem] = useState<JournalType | TagType | undefined>();
     const setHeaderContent = useHeaderContent();
@@ -34,7 +45,7 @@ const Journal = () => {
     };
 
     // TODO handle editing a journal
-    const handleSelectJournal = (journal: JournalType) => {
+    const handleSelectItem = (item: JournalType | TagType) => {
         //...
     };
 
@@ -90,133 +101,28 @@ const Journal = () => {
                     onCancel={handleCancel}
                 />
             )}
+            {selectedTab === "journals" &&
+                journals.map(journal => (
+                    <Box key={journal.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+                        <h4>{journal.name}</h4>
+                        <p>{journal.description}</p>
+                        <Button onClick={() => handleSelectItem(journal)}>Edit</Button>
+                    </Box>
+                ))
+            }
+
+            {selectedTab === "tags" &&
+                tags.map(tag => (
+                    <Box key={tag.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+                        <h4>{tag.name}</h4>
+                        <p>Category: {tag.tagCategory}</p>
+                        <Button onClick={() => handleSelectItem(tag)}>Edit</Button>
+                    </Box>
+                ))
+            }
+
         </Box>
     );
 };
 
 export default Journal;
-
-// import React, { useEffect, useState } from 'react';
-// import { useNavigate, Link } from 'react-router-dom';
-// import {
-//     Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow,
-//     Button, TextField, IconButton, Tooltip, Links
-// } from '@mui/material';
-// import { Delete as DeleteIcon, Edit as EditIcon, Done as DoneIcon, Clear as ClearIcon } from '@mui/icons-material';
-// import axios from 'axios';
-// import { useStateContext } from '../contexts/ContextProvider';
-//
-// const Journals = () => {
-//     const { user, journals, setJournals } = useStateContext();
-//     const navigate = useNavigate();
-//     const [journalName, setJournalName] = useState("");
-//     const [journalDescription, setJournalDescription] = useState("");
-//     const [editingJournalId, setEditingJournalId] = useState(null);
-//
-//     const apiConfig = (method = "GET", data = {}) => ({
-//         method,
-//         headers: {
-//             Authorization: `Bearer ${user.token}`,
-//         },
-//         data
-//     });
-//
-//     const fetchJournals = async () => {
-//         try {
-//             const { data } = await axios(apiConfig());
-//             setJournals(data);
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     };
-//
-//     useEffect(() => {
-//         fetchJournals();
-//     }, []);
-//
-//     return (
-//         <div>
-//             <Grid container spacing={3}>
-//                 <Grid item xs={12}>
-//                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-//                         <h2>Journals</h2>
-//                         <Button variant="contained" onClick={() => navigate('/dashboard/journal/add')}>+ Create a Journal</Button>
-//                         <JournalTable {...{ journals, editingJournalId, setEditingJournalId, setJournalName, setJournalDescription, journalName, journalDescription }} />
-//                         <Links color="primary" href="#" onClick={(e) => e.preventDefault()} sx={{ mt: 3 }}>
-//                             See more orders
-//                         </Links>
-//                     </Paper>
-//                 </Grid>
-//             </Grid>
-//         </div>
-//     );
-// };
-//
-// const JournalTable = ({ journals, editingJournalId, setEditingJournalId, setJournalName, setJournalDescription, journalName, journalDescription }) => (
-//     <Table size="small">
-//         <TableHead>
-//             <TableRow>
-//                 <TableCell>Name</TableCell>
-//                 <TableCell>Description</TableCell>
-//                 <TableCell>Actions</TableCell>
-//             </TableRow>
-//         </TableHead>
-//         <TableBody>
-//             {journals.map((journal) => (
-//                 <JournalRow key={journal._id} {...{ journal, editingJournalId, setEditingJournalId, setJournalName, setJournalDescription, journalName, journalDescription }} />
-//             ))}
-//         </TableBody>
-//     </Table>
-// );
-//
-// const JournalRow = ({ journal, editingJournalId, setEditingJournalId, setJournalName, setJournalDescription, journalName, journalDescription }) => (
-//     <TableRow key={journal._id}>
-//         <TableCell>
-//             {editingJournalId === journal._id ? (
-//                 <TextField value={journalName} onChange={(e) => setJournalName(e.target.value)} />
-//             ) : (
-//                 journal.journalName
-//             )}
-//         </TableCell>
-//         <TableCell>
-//             {editingJournalId === journal._id ? (
-//                 <TextField value={journalDescription} onChange={(e) => setJournalDescription(e.target.value)} />
-//             ) : (
-//                 journal.journalDescription
-//             )}
-//         </TableCell>
-//         <TableCell>
-//             {editingJournalId === journal._id ? (
-//                 <>
-//                     <Tooltip title="Done">
-//                         <IconButton onClick={() => handleEditSubmit(journal._id)}>
-//                             <DoneIcon />
-//                         </IconButton>
-//                     </Tooltip>
-//                     <Tooltip title="Clear">
-//                         <IconButton onClick={() => setEditingJournalId(null)}>
-//                             <ClearIcon />
-//                         </IconButton>
-//                     </Tooltip>
-//                 </>
-//             ) : (
-//                 <>
-//                     <Tooltip title="Edit">
-//                         <IconButton onClick={() => setEditingJournalId(journal._id)}>
-//                             <EditIcon />
-//                         </IconButton>
-//                     </Tooltip>
-//                     <Tooltip title="Delete">
-//                         <IconButton onClick={() => handleDeleteSubmit(journal._id)}>
-//                             <DeleteIcon />
-//                         </IconButton>
-//                     </Tooltip>
-//                 </>
-//             )}
-//         </TableCell>
-//     </TableRow>
-// );
-//
-// // ... other code remains the same ...
-//
-// export default Journals;
