@@ -4,7 +4,6 @@ import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
 import ItemForm from "./ItemForm";
 import { JournalType, TagType } from '../../types/types';
-import {Tag} from "styled-components/native/dist/sheet/types";
 
 const Journal = () => {
     const FAKE_JOURNALS = [
@@ -24,6 +23,29 @@ const Journal = () => {
     const [editingItem, setEditingItem] = useState<string | null>(null);
     const setHeaderContent = useHeaderContent();
     const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
+
+    const renderListItem = (item: JournalType | TagType, type: 'journal' | 'tag') => {
+        return editingItem === item.name ? (
+            <ItemForm
+                type={type}
+                existingItem={item}
+                onSave={handleSave}
+                onCancel={() => setEditingItem(null)}
+            />
+        ) : (
+            <Box key={item.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+                <h4>{item.name}</h4>
+                <p>
+                    {
+                        type === 'journal'
+                            ? (item as JournalType).description
+                            : `Category: ${(item as TagType).tagCategory}`
+                    }
+                </p>
+                <Button onClick={() => handleSelectItem(item)}>Edit</Button>
+            </Box>
+        );
+    }
 
     const handleAddItem = () => {
         setSelectedItem(undefined);
@@ -80,7 +102,19 @@ const Journal = () => {
                 tabs={[
                     {
                         label: "Journals",
-                        content: <div>Content for Item One</div>,
+                        content: (
+                            <>
+                                {showForm && !editingItem && selectedTab === 'journals' && (
+                                    <ItemForm
+                                        type="journal"
+                                        existingItem={selectedItem}
+                                        onSave={handleSave}
+                                        onCancel={handleCancel}
+                                    />
+                                )}
+                                {journals.map(journal => renderListItem(journal, 'journal'))}
+                            </>
+                        ),
                         route: "journals",
                         onClick: () => {
                             setSelectedTab("journals");
@@ -89,65 +123,27 @@ const Journal = () => {
                     },
                     {
                         label: "Tags",
-                        content: <div>Content for Item Two</div>,
+                        content: (
+                            <>
+                                {showForm && !editingItem && selectedTab === 'tags' && (
+                                    <ItemForm
+                                        type="tag"
+                                        existingItem={selectedItem}
+                                        onSave={handleSave}
+                                        onCancel={handleCancel}
+                                    />
+                                )}
+                                {tags.map(tag => renderListItem(tag, 'tag'))}
+                            </>
+                        ),
                         route: "tags",
                         onClick: () => {
-                            setSelectedTab("tags")
+                            setSelectedTab("tags");
                             setShowForm(false);
                         }
                     },
                 ]}
             />
-            {showForm && (
-                <ItemForm
-                    type={selectedTab === 'journals' ? 'journal' : 'tag'}
-                    existingItem={selectedItem}
-                    onSave={handleSave}
-                    onCancel={handleCancel}
-                />
-            )}
-            {selectedTab === "journals" &&
-                journals.map(journal => (
-                    <>
-                        {editingItem === journal.name ? (
-                            <ItemForm
-                                type='journal'
-                                existingItem={journal}
-                                onSave={handleSave}
-                                onCancel={() => setEditingItem(null)}
-                            />
-                        ) : (
-                            <Box key={journal.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
-                                <h4>{journal.name}</h4>
-                                <p>{journal.description}</p>
-                                <Button onClick={() => handleSelectItem(journal)}>Edit</Button>
-                            </Box>
-                        )}
-                    </>
-                ))
-            }
-
-            {selectedTab === "tags" &&
-                tags.map(tag => (
-                    <>
-                        {editingItem === tag.name ? (
-                            <ItemForm
-                                type='journal'
-                                existingItem={tag}
-                                onSave={handleSave}
-                                onCancel={() => setEditingItem(null)}
-                            />
-                        ) : (
-                            <Box key={tag.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
-                                <h4>{tag.name}</h4>
-                                <p>{tag.tagCategory}</p>
-                                <Button onClick={() => handleSelectItem(tag)}>Edit</Button>
-                            </Box>
-                        )}
-                    </>
-                ))
-            }
-
         </Box>
     );
 };
