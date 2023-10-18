@@ -4,18 +4,20 @@ import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
 import ItemForm from "./ItemForm";
 import { JournalType, TagType } from '../../types/types';
+import {Link, useNavigate} from "react-router-dom";
 
 const Journal = () => {
     const FAKE_JOURNALS = [
-        { name: 'Journal 1', description: 'Description for Journal 1' },
-        { name: 'Journal 2', description: 'Description for Journal 2' },
+        { id: 'j1', name: 'Journal 1', description: 'Description for Journal 1' },
+        { id: 'j2', name: 'Journal 2', description: 'Description for Journal 2' },
     ];
 
     const FAKE_TAGS: TagType[] = [
-        { name: 'Tag 1', tagCategory: 'setup' },
-        { name: 'Tag 2', tagCategory: 'mistake' },
+        { id: 't1', name: 'Tag 1', tagCategory: 'setup' },
+        { id: 't2', name: 'Tag 2', tagCategory: 'mistake' },
     ];
 
+    const navigate = useNavigate();
     const [journals, setJournals] = useState<JournalType[]>(FAKE_JOURNALS);
     const [tags, setTags] = useState<TagType[]>(FAKE_TAGS);
     const [showForm, setShowForm] = useState(false);
@@ -25,6 +27,12 @@ const Journal = () => {
     const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
 
     const renderListItem = (item: JournalType | TagType, type: 'journal' | 'tag') => {
+        const handleItemClick = () => {
+            if (type === 'journal') {
+                navigate(`./${(item as JournalType).id}`);
+            }
+        };
+
         return editingItem === item.name ? (
             <ItemForm
                 type={type}
@@ -33,7 +41,12 @@ const Journal = () => {
                 onCancel={() => setEditingItem(null)}
             />
         ) : (
-            <Box key={item.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+            <Box
+                key={item.name} m={2} p={2}
+                border="1px solid #ccc"
+                borderRadius="4px"
+                style={{cursor: type === 'journal' ? 'pointer' : 'default'}}
+                onClick={handleItemClick}>
                 <h4>{item.name}</h4>
                 <p>
                     {
@@ -42,7 +55,10 @@ const Journal = () => {
                             : `Category: ${(item as TagType).tagCategory}`
                     }
                 </p>
-                <Button onClick={() => handleSelectItem(item)}>Edit</Button>
+                <Button onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectItem(item);
+                }}>Edit</Button>
             </Box>
         );
     }
