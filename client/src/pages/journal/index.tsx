@@ -21,11 +21,13 @@ const Journal = () => {
     const [tags, setTags] = useState<TagType[]>(FAKE_TAGS);
     const [showForm, setShowForm] = useState(false);
     const [selectedItem, setSelectedItem] = useState<JournalType | TagType | undefined>();
+    const [editingItem, setEditingItem] = useState<string | null>(null);
     const setHeaderContent = useHeaderContent();
     const [selectedTab, setSelectedTab] = useState<"journals" | "tags">("journals");
 
     const handleAddItem = () => {
         setSelectedItem(undefined);
+        setEditingItem(null);
         setShowForm(true);
     };
 
@@ -42,11 +44,14 @@ const Journal = () => {
 
     const handleCancel = () => {
         setShowForm(false);
+        setEditingItem(null);
     };
 
     // TODO handle editing a journal
     const handleSelectItem = (item: JournalType | TagType) => {
-        //...
+        setSelectedItem(item);
+        setShowForm(false);
+        setEditingItem(item.name);
     };
 
     React.useEffect(() => {
@@ -103,21 +108,43 @@ const Journal = () => {
             )}
             {selectedTab === "journals" &&
                 journals.map(journal => (
-                    <Box key={journal.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
-                        <h4>{journal.name}</h4>
-                        <p>{journal.description}</p>
-                        <Button onClick={() => handleSelectItem(journal)}>Edit</Button>
-                    </Box>
+                    <>
+                        {editingItem === journal.name ? (
+                            <ItemForm
+                                type='journal'
+                                existingItem={journal}
+                                onSave={handleSave}
+                                onCancel={() => setEditingItem(null)}
+                            />
+                        ) : (
+                            <Box key={journal.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+                                <h4>{journal.name}</h4>
+                                <p>{journal.description}</p>
+                                <Button onClick={() => handleSelectItem(journal)}>Edit</Button>
+                            </Box>
+                        )}
+                    </>
                 ))
             }
 
             {selectedTab === "tags" &&
                 tags.map(tag => (
-                    <Box key={tag.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
-                        <h4>{tag.name}</h4>
-                        <p>Category: {tag.tagCategory}</p>
-                        <Button onClick={() => handleSelectItem(tag)}>Edit</Button>
-                    </Box>
+                    <>
+                        {editingItem === tag.name ? (
+                            <ItemForm
+                                type='journal'
+                                existingItem={tag}
+                                onSave={handleSave}
+                                onCancel={() => setEditingItem(null)}
+                            />
+                        ) : (
+                            <Box key={tag.name} m={2} p={2} border="1px solid #ccc" borderRadius="4px">
+                                <h4>{tag.name}</h4>
+                                <p>{tag.tagCategory}</p>
+                                <Button onClick={() => handleSelectItem(tag)}>Edit</Button>
+                            </Box>
+                        )}
+                    </>
                 ))
             }
 
