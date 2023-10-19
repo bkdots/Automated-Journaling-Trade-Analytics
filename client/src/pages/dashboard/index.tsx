@@ -5,6 +5,7 @@ import {Box} from "@mui/material";
 import Settings from "../auth/Settings";
 import Journal from "../journal/index";
 import React from "react";
+import JournalDetail from '../journal/JournalDetail';
 
 const Dashboard = () => {
     const location = useLocation();
@@ -31,6 +32,7 @@ const Dashboard = () => {
                     <Routes>
                         <Route path="settings" element={<Settings/>}/>
                         <Route path="journals" element={<Journal/>}/>
+                        <Route path="journals/:id" element={<JournalDetail/>}/>
                     </Routes>
                 </Box>
             )}

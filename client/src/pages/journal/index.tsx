@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
+import JournalDetail from "./JournalDetail";
 import ItemForm from "./ItemForm";
 import { JournalType, TagType } from '../../types/types';
 import {Link, useNavigate} from "react-router-dom";
@@ -42,7 +43,7 @@ const Journal = () => {
             />
         ) : (
             <Box
-                key={item.name} m={2} p={2}
+                key={item.id} m={2} p={2}
                 border="1px solid #ccc"
                 borderRadius="4px"
                 style={{cursor: type === 'journal' ? 'pointer' : 'default'}}
