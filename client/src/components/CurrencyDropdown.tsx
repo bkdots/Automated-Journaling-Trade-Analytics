@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
-import Dropdown from './Dropdown'; // Assuming Dropdown is in the same folder
-import { useCurrency, Currency } from '../context/currency'; // Assuming CurrencyProvider is in the same folder
+import Dropdown from './Dropdown';
+import { useCurrency, Currency } from '../context/currency';
 
 const CurrencyDropdown: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
