@@ -1,6 +1,6 @@
 import React, {FC, useState } from "react";
 import { Box, TextField, Button, MenuItem } from '@mui/material';
-import { JournalType, TagType } from '../../types/types';
+import { JournalType, TagType, TagCategoryEnum } from '../../types/types';
 
 interface ItemFormProps {
     type: 'journal' | 'tag';
@@ -22,7 +22,7 @@ const ItemForm: FC<ItemFormProps> = ({ type, existingItem, onSave, onCancel }) =
         if (type === 'journal') {
             onSave({ name, description } as JournalType);
         } else {
-            onSave({ name, tagCategory: tagCategory as 'setup' | 'mistake' } as TagType);
+            onSave({ name, tagCategory: TagCategoryEnum[tagCategory as keyof typeof TagCategoryEnum] } as TagType);
         }
     };
 

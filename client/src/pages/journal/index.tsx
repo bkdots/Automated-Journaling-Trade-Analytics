@@ -4,7 +4,7 @@ import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
 import JournalDetail from "./JournalDetail";
 import ItemForm from "./ItemForm";
-import { JournalType, TagType } from '../../types/types';
+import { JournalType, TagType, TagCategoryEnum } from '../../types/types';
 import {Link, useNavigate} from "react-router-dom";
 
 const Journal = () => {
@@ -14,8 +14,8 @@ const Journal = () => {
     ];
 
     const FAKE_TAGS: TagType[] = [
-        { id: 't1', name: 'Tag 1', tagCategory: 'setup' },
-        { id: 't2', name: 'Tag 2', tagCategory: 'mistake' },
+        { id: 't1', name: 'Tag 1', tagCategory: TagCategoryEnum.Setup},
+        { id: 't2', name: 'Tag 2', tagCategory: TagCategoryEnum.Mistake },
     ];
 
     const navigate = useNavigate();

@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import { Box, Button } from '@mui/material';
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
+import { useParams } from "react-router-dom";
 
 const JournalDetail = () => {
     const setHeaderContent = useHeaderContent();
     const [selectedTab, setSelectedTab] = useState<"openTrades" | "closedTrades">("openTrades");
+    let { id } = useParams();
     const handleAddTrade = () => console.log('Add Trade');
     const handleMerge = () => console.log('Merge');
     const handleDuplicate = () => console.log('Duplicate');
@@ -44,12 +46,12 @@ const JournalDetail = () => {
                 tabs={[
                     {
                         label: "Open Trades",
-                        content: <p>Open trades content here...</p>, // Replace with the actual content
+                        content: <p>Open trades content here...</p>,
                         route: "open-trades"
                     },
                     {
                         label: "Concluded Trades",
-                        content: <p>Concluded trades content here...</p>, // Replace with the actual content
+                        content: <p>Concluded trades content here...</p>,
                         route: "concluded-trades"
                     }
                 ]}
