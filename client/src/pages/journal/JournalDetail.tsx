@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Box, Button } from '@mui/material';
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
@@ -131,7 +131,6 @@ const fakeTrades: TradeType[] = [
 
 const JournalDetail = () => {
     const setHeaderContent = useHeaderContent();
-    const [selectedTab, setSelectedTab] = useState<"openTrades" | "closedTrades">("openTrades");
     let { id } = useParams();
     const handleAddTrade = () => console.log('Add Trade');
     const handleMerge = () => console.log('Merge');

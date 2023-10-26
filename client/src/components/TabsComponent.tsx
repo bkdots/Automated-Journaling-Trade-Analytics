@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {FC, ReactNode, SyntheticEvent, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 interface TabPanelProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
     index: number;
     value: number;
 }
 
 interface TabData {
     label: string;
-    content: React.ReactNode;
+    content: ReactNode;
     route: string;
     onClick?: () => void;
 }
@@ -49,7 +49,7 @@ function a11yProps(index: number) {
     };
 }
 
-const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
+const TabsComponent: FC<TabsComponentProps> = ({ tabs }) => {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -57,11 +57,11 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ tabs }) => {
     const value = tabs.findIndex(tab => tab.route === currentTabRoute);
     const activeValue = value !== -1 ? value : 0;
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: SyntheticEvent, newValue: number) => {
         navigate(`?tab=${tabs[newValue].route}`);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!currentTabRoute) {
             navigate(`?tab=${tabs[0].route}`);
         }

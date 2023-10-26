@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import {Box, Button} from "@mui/material";
 import TabsComponent from '../../components/TabsComponent';
 import {useHeaderContent} from "../../context/HeaderContent";
-import JournalDetail from "./JournalDetail";
 import ItemForm from "./ItemForm";
 import { JournalType, TagType, TagCategoryEnum } from '../../types/types';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Journal = () => {
     const FAKE_JOURNALS = [
