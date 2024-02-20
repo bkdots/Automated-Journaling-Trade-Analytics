@@ -1,0 +1,11 @@
+### Infrastructure Details
+- Backend
+  - Using a Container Application Hosting for Rust application
+- Front end
+  - React application with typescript hosted with Static Web Apps
+- Database
+  - Postgres Server hosted on Azure SQL db
+- Image Storage
+  - Using storage
+- Authentication
+  - Azure B2C authentication
