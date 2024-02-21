@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS journals
+(
+    journal_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+GO
