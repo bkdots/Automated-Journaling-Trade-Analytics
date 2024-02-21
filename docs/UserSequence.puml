@@ -1,0 +1,39 @@
+@startuml
+
+participant "User" as U
+participant "Frontend (React)" as F
+participant "Backend (Rust on EC2)" as B
+participant "Authentication (Cognito)" as C
+database "Database (RDS PostgreSQL)" as DB
+database "Image Storage (S3)" as S3
+
+U -> F : Access Application
+F -> B : Request User Status
+B -> C : Verify Authentication
+C --> B : User Status
+B --> F : Return User Status
+F -> U : Display Dashboard/Sign In
+
+U -> F : Upload Trade Data
+F -> B : Process Trade Data
+B -> DB : Store Trade Data
+DB --> B : Acknowledge
+B --> F : Trade Upload Status
+F -> U : Display Status
+
+U -> F : View Analytics
+F -> B : Request Analytics
+B -> DB : Fetch Trade Data
+DB --> B : Return Trade Data
+B -> B : Process Analytics
+B --> F : Send Analytics Data
+F -> U : Display Analytics
+
+U -> F : Upload Image
+F -> B : Request Image Upload
+B -> S3 : Store Image
+S3 --> B : Image URL
+B --> F : Return Image URL
+F -> U : Display Image
+
+@enduml

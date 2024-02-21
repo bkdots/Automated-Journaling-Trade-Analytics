@@ -1,0 +1,33 @@
+@startuml
+participant "Frontend App" as A
+participant "Backend Service" as B
+participant "Database" as C
+participant "Analytics Service" as D
+participant "Cache" as E
+
+A -> B: Submit new trade data
+activate B
+B -> C: Store new trade in DB
+activate C
+C --> B: Acknowledge storage
+deactivate C
+
+B -> D: Trigger incremental analytics update
+activate D
+D -> C: Fetch new trade data
+activate C
+C --> D: Return new trade data
+deactivate C
+D -> E: Update analytics in cache
+activate E
+E --> D: Acknowledge cache update
+deactivate D
+deactivate E
+
+A -> B: Request dashboard data
+B -> E: Fetch cached analytics
+activate E
+E --> B: Return cached analytics
+B -> A: Return dashboard data
+deactivate B
+@enduml

@@ -1,8 +1,9 @@
 
 # Running Server For Development
 - Using a local postgres database
-## Starting docker db
+- Needs Docker installed
 
+## Starting docker db
 ```pwsh
     docker compose up -d db
 ```
