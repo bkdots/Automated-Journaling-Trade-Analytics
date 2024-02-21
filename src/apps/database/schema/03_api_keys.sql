@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS api_keys
 (
     api_key_id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
+    api_key_title VARCHAR(255) NOT NULL,
     api_key_value TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
