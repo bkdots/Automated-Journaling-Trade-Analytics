@@ -3,7 +3,7 @@
 - Using a local postgres database
 - Needs Docker installed
 
-## Starting docker db
+## Starting docker db in the background with -d meaning detached
 ```pwsh
     docker compose up -d db
 ```
@@ -31,4 +31,15 @@
 ## Check running containers
 ```pwsh
     docker ps -a
+```
+
+
+## Docker Compose Start Containers and Initialize DB
+```pwsh
+    docker-compose up
+```
+
+## Docker Compose Stop Containers and Initialize DB
+```pwsh
+    docker-compose down -v
 ```
