@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS trades
     lowest_price DECIMAL(10, 2) NULL,
     origin_take_profit_hit BOOLEAN NULL,
     FOREIGN KEY (journal_id) REFERENCES journals(journal_id),
-    FOREIGN KEY (setup_id) REFERENCES setups(journal_id),
+    FOREIGN KEY (setup_id) REFERENCES setups(setup_id),
     FOREIGN KEY (tag_id) REFERENCES tags(tag_id),
     FOREIGN KEY (thread_id) REFERENCES threads(thread_id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
