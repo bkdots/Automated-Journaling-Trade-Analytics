@@ -7,7 +7,7 @@ import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Downloa
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import dayjs from 'dayjs';
-
+import { paths } from '@/paths';
 import { config } from '@/config';
 import { TradesFilters } from '@/components/dashboard/journal/trades-filters';
 import { TradesTable } from '@/components/dashboard/journal/trades-table';
@@ -130,7 +130,7 @@ export default function Page(): React.JSX.Element {
           </Stack>
         </Stack>
         <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+          <Button href={paths.dashboard.trade} startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
             Add
           </Button>
         </div>
