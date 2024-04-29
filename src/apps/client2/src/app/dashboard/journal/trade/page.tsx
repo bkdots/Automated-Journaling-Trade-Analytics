@@ -11,9 +11,10 @@ import dayjs from 'dayjs';
 import { config } from '@/config';
 import { TradesFilters } from '@/components/dashboard/journal/trades-filters';
 import { TradesTable } from '@/components/dashboard/journal/trades-table';
+import { TradesThread } from '@/components/dashboard/trade/trades-thread';
 import type { Trade } from '@/components/dashboard/journal/trades-table';
 
-export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
+export const metadata = { title: `Trade | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 const customers = [
     {
@@ -135,13 +136,7 @@ export default function Page(): React.JSX.Element {
                     </Button>
                 </div>
             </Stack>
-            <TradesFilters />
-            <TradesTable
-                count={paginatedCustomers.length}
-                page={page}
-                rows={paginatedCustomers}
-                rowsPerPage={rowsPerPage}
-            />
+            <TradesThread/>
         </Stack>
     );
 }
