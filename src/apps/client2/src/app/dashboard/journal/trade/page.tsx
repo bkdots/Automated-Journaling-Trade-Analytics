@@ -9,9 +9,8 @@ import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import dayjs from 'dayjs';
 
 import { config } from '@/config';
-import { TradesFilters } from '@/components/dashboard/journal/trades-filters';
-import { TradesTable } from '@/components/dashboard/journal/trades-table';
 import { TradesThread } from '@/components/dashboard/trade/trades-thread';
+import { TradesData } from '@/components/dashboard/trade/trades-data';
 import type { Trade } from '@/components/dashboard/journal/trades-table';
 
 export const metadata = { title: `Trade | Dashboard | ${config.site.name}` } satisfies Metadata;
@@ -137,6 +136,7 @@ export default function Page(): React.JSX.Element {
                 </div>
             </Stack>
             <TradesThread/>
+            <TradesData/>
         </Stack>
     );
 }
