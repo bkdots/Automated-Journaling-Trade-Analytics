@@ -7,15 +7,15 @@ import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Downloa
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import dayjs from 'dayjs';
-
+import { paths } from '@/paths';
 import { config } from '@/config';
 import { TradesFilters } from '@/components/dashboard/journal/trades-filters';
 import { TradesTable } from '@/components/dashboard/journal/trades-table';
 import type { Trade } from '@/components/dashboard/journal/trades-table';
 
-export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
+export const metadata = { title: `Trades | Dashboard | ${config.site.name}` } satisfies Metadata;
 
-const customers = [
+const trades = [
   {
     id: 'USR-010',
     name: 'Alcides Antonio',
@@ -113,7 +113,7 @@ export default function Page(): React.JSX.Element {
   const page = 0;
   const rowsPerPage = 5;
 
-  const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
+  const paginatedTrades = applyPagination(trades, page, rowsPerPage);
 
   return (
     <Stack spacing={3}>
@@ -130,16 +130,16 @@ export default function Page(): React.JSX.Element {
           </Stack>
         </Stack>
         <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+          <Button href={paths.dashboard.trade} startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
             Add
           </Button>
         </div>
       </Stack>
       <TradesFilters />
       <TradesTable
-        count={paginatedCustomers.length}
+        count={paginatedTrades.length}
         page={page}
-        rows={paginatedCustomers}
+        rows={paginatedTrades}
         rowsPerPage={rowsPerPage}
       />
     </Stack>

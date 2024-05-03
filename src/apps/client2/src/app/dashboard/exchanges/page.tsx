@@ -12,33 +12,33 @@ import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import dayjs from 'dayjs';
 
 import { config } from '@/config';
-import { IntegrationCard } from '@/components/dashboard/integrations/integrations-card';
-import type { Integration } from '@/components/dashboard/integrations/integrations-card';
-import { CompaniesFilters } from '@/components/dashboard/integrations/integrations-filters';
+import { ExchangeCard } from '@/components/dashboard/exchanges/exchanges-card';
+import type { Exchange } from '@/components/dashboard/exchanges/exchanges-card';
+import { ExchangesFilters } from '@/components/dashboard/exchanges/exchanges-filters';
 
 export const metadata = { title: `Integrations | Dashboard | ${config.site.name}` } satisfies Metadata;
 
-const integrations = [
+const exchanges = [
   {
     id: 'INTEG-006',
-    title: 'Dropbox',
-    description: 'Dropbox is a file hosting service that offers cloud storage, file synchronization, a personal cloud.',
+    title: 'Binance',
+    description: 'Swing trading futures',
     logo: '/assets/logo-dropbox.png',
     installs: 594,
     updatedAt: dayjs().subtract(12, 'minute').toDate(),
   },
   {
     id: 'INTEG-005',
-    title: 'Medium Corporation',
-    description: 'Medium is an online publishing platform developed by Evan Williams, and launched in August 2012.',
+    title: 'Bybit',
+    description: 'Day trading futures',
     logo: '/assets/logo-medium.png',
     installs: 625,
     updatedAt: dayjs().subtract(43, 'minute').subtract(1, 'hour').toDate(),
   },
   {
     id: 'INTEG-004',
-    title: 'Slack',
-    description: 'Slack is a cloud-based set of team collaboration tools and services, founded by Stewart Butterfield.',
+    title: 'Vertex',
+    description: 'Onchain Day trading futures',
     logo: '/assets/logo-slack.png',
     installs: 857,
     updatedAt: dayjs().subtract(50, 'minute').subtract(3, 'hour').toDate(),
@@ -67,14 +67,14 @@ const integrations = [
     installs: 435,
     updatedAt: dayjs().subtract(25, 'minute').subtract(6, 'hour').subtract(6, 'day').toDate(),
   },
-] satisfies Integration[];
+] satisfies Exchange[];
 
 export default function Page(): React.JSX.Element {
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Integrations</Typography>
+          <Typography variant="h4">Exchanges</Typography>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
             <Button color="inherit" startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}>
               Import
@@ -90,11 +90,11 @@ export default function Page(): React.JSX.Element {
           </Button>
         </div>
       </Stack>
-      <CompaniesFilters />
+      <ExchangesFilters />
       <Grid container spacing={3}>
-        {integrations.map((integration) => (
-          <Grid key={integration.id} lg={4} md={6} xs={12}>
-            <IntegrationCard integration={integration} />
+        {exchanges.map((exchange) => (
+          <Grid key={exchange.id} lg={4} md={6} xs={12}>
+            <ExchangeCard exchange={exchange} />
           </Grid>
         ))}
       </Grid>
