@@ -7,6 +7,7 @@ export const paths = {
     journal: '/dashboard/journal',
     trade: '/dashboard/journal/trade',
     exchanges: '/dashboard/exchanges',
+    exchange: '/dashboard/exchanges/exchange',
     settings: '/dashboard/settings',
   },
   errors: { notFound: '/errors/not-found' },
