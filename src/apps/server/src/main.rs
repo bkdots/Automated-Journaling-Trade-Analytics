@@ -1,5 +1,7 @@
 #![allow(unused)]
 
+pub use self::error::{Error,Result};
+
 use axum::extract::{Path, Query};
 use axum::http::{Method, Uri};
 use axum::response::{Html, IntoResponse, Response};
@@ -11,10 +13,14 @@ use serde::Deserialize;
 use serde_json::json;
 use tower_http::services::ServeDir;
 
+mod error;
+mod web;
+
 #[tokio::main]
 async fn main() {
     let routes_all = Router::new()
         .merge(routes_hello())
+        .merge(web::routes_login::routes())
         .fallback_service(routes_static());
 
     // region:  --- Start Server
