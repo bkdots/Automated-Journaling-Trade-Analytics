@@ -1159,6 +1159,8 @@ dependencies = [
  "axum",
  "httpc-test",
  "postgres",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
