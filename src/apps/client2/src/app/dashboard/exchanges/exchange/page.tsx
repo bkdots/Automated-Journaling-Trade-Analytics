@@ -1,6 +1,6 @@
 "use client";
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { Metadata } from 'next';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -128,8 +128,8 @@ const fetchEventsForSubaccount = async (subaccount: string) => {
     const requestBody = {
         events: {
             subaccount: subaccount,
-            event_types: ["liquidate_subaccount", "deposit_collateral", "withdraw_collateral", "settle_pnl", "match_orders", "mint_lp", "burn_lp"], // Assuming you want all types
-            limit: { raw: 100 } // Fetch up to 100 events
+            event_types: ["settle_pnl"], // Assuming you want all types
+            limit: { raw: 2 } // Fetch up to 100 events
         }
     };
 
@@ -148,12 +148,23 @@ const fetchEventsForSubaccount = async (subaccount: string) => {
 
         const data = await response.json();
         console.log('Received data:', data);
+
+        if (data?.events?.length >= 2) {
+            const [event1, event2] = data.events;
+            // Use optional chaining to safely access nested properties
+            const total_pnl = (
+                (parseInt(event1?.post_balance?.spot?.balance?.amount || '0') * parseInt(event1?.product?.spot?.oracle_price_x18 || '0') - parseInt(event1?.net_entry_cumulative || '0')) -
+                (parseInt(event2?.post_balance?.spot?.balance?.amount || '0') * parseInt(event2?.product?.spot?.oracle_price_x18 || '0') - parseInt(event2?.net_entry_cumulative || '0'))
+            );
+            console.log(`Total PNL between two events: ${total_pnl}`);
+        }
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 };
 
 export default function Page(): React.JSX.Element {
+    const [eventData, setEventData] = useState(null);
     const page = 0;
     const rowsPerPage = 5;
 
