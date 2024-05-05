@@ -43,3 +43,30 @@
 ```pwsh
     docker-compose down -v
 ```
+
+
+
+# start server
+```pwsh
+    cargo run
+```
+
+# Run Server and recompile for quick testing in dev
+```pwsh
+    cargo watch -q -c -w src/ -x run
+```
+every source code change recompiles it and run it again
+- -q = quit
+- -c = clear in between in each recompile
+- -w src/ = watch only the source folder
+- -x run = execute
+
+# Run front end 
+```pwsh
+    cargo watch -q -c -w tests/ -x "test -q quick_dev -- --nocapture"
+```
+every source code change recompiles it and run it again
+- -q = quit
+- -c = clear in between in each recompile
+- -w src/ = watch only the source folder
+- -x run = execute
