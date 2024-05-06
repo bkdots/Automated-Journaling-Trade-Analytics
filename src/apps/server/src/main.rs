@@ -2,6 +2,7 @@
 
 pub use self::error::{Error,Result};
 
+use crate::model::ModelController;
 use axum::extract::{Path, Query};
 use axum::http::{Method, Uri};
 use axum::response::{Html, IntoResponse, Response};
@@ -16,13 +17,18 @@ use tower_cookies::CookieManagerLayer;
 
 mod error;
 mod web;
+mod model;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
+    // Initialize ModelController
+    let mc = ModelController::new().await?;
+
     // The below gets executed form the bottom to the top
     let routes_all = Router::new()
         .merge(routes_hello())
         .merge(web::routes_login::routes())
+        .nest("/api", web::routes_tickets::routes(mc.clone()))
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
@@ -35,6 +41,8 @@ async fn main() {
         .await
         .unwrap();
     // endregion:   ---Start Server
+
+Ok(())
 }
 
 async fn main_response_mapper(res: Response) -> Response {

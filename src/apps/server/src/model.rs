@@ -3,7 +3,7 @@
 
 use crate::{Error, Result};
 use serde::{Deserialize, Serialize};
-use std::async::{Arc, Mutex};
+use std::sync::{Arc, Mutex};
 
 // region:  --- Ticket Types
 #[derive(Clone, Debug, Serialize)]
