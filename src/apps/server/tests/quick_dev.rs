@@ -19,7 +19,7 @@ async fn quick_dev() -> Result<()> {
             // "pwd": "WRONG"
         })
     );
-    req_login.await?.print().await?;
+    // req_login.await?.print().await?;
 
     let req_create_ticket = hc.do_post(
        "/api/tickets",
@@ -28,7 +28,6 @@ async fn quick_dev() -> Result<()> {
         }),
     );
     req_create_ticket.await?.print().await?;
-
 
     // hc.do_delete("/api/tickets/1").await?.print().await?;
 
