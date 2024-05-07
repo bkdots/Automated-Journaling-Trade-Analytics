@@ -15,6 +15,7 @@ use serde_json::json;
 use tower_http::services::ServeDir;
 use tower_cookies::CookieManagerLayer;
 
+mod ctx;
 mod error;
 mod web;
 mod model;
