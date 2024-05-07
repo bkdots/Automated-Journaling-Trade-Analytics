@@ -1,200 +1,127 @@
-use postgres::{ Client, NoTls };
-use postgres::Error as PostgresError;
-use std::net::{ TcpListener, TcpStream };
-use std::io::{ Read, Write };
-use std::env;
+#![allow(unused)]
 
-#[macro_use]
-extern crate serde_derive;
+pub use self::error::{Error,Result};
+use crate::ctx::Ctx;
+use crate::log::log_request;
+use crate::model::ModelController;
+use axum::extract::{Path, Query};
+use axum::http::{Method, Uri};
+use axum::response::{Html, IntoResponse, Response};
+use axum::routing::{get, get_service};
+use axum::{middleware, Json, Router};
+use std::net::SocketAddr;
+use tokio::net::TcpListener;
+use serde::Deserialize;
+use serde_json::json;
+use uuid::Uuid;
+use tower_http::services::ServeDir;
+use tower_cookies::CookieManagerLayer;
 
-//Model: USer struct with id, name, email
-#[derive(Serialize, Deserialize)]
-struct User {
-    id: Option<i32>,
-    name: String,
-    email: String,
+mod ctx;
+mod error;
+mod log;
+mod web;
+mod model;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    // Initialize ModelController
+    let mc = ModelController::new().await?;
+
+    // Ensure Auth token is needed for these routes
+    let routes_apis = web::routes_tickets::routes(mc.clone())
+        .route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
+
+    // The below gets executed form the bottom to the top
+    let routes_all = Router::new()
+        .merge(routes_hello())
+        .merge(web::routes_login::routes())
+        .nest("/api", routes_apis)
+        .layer(middleware::map_response(main_response_mapper))
+        .layer(middleware::from_fn_with_state(
+            mc.clone(),
+            web::mw_auth::mw_ctx_resolver,
+        ))
+        .layer(CookieManagerLayer::new())
+        .fallback_service(routes_static());
+
+    // region:  --- Start Server
+    let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
+    println!("->> LISTENING on {addr}\n");
+    axum::Server::bind(&addr)
+        .serve(routes_all.into_make_service())
+        .await
+        .unwrap();
+    // endregion:   ---Start Server
+
+Ok(())
 }
 
-//DATABASE_URL
-const DB_URL: &str = env!("DATABASE_URL");
+async fn main_response_mapper(
+    ctx: Option<Ctx>,
+    uri: Uri,
+    req_method: Method,
+    res: Response
+) -> Response {
+    println!("->> {:<12} - main_response_mapper", "RES_MAPPER");
+    let uuid = Uuid::new_v4();
 
-//constants
-const OK_RESPONSE: &str = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n";
-const NOT_FOUND: &str = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
-const INTERNAL_SERVER_ERROR: &str = "HTTP/1.1 500 INTERNAL SERVER ERROR\r\n\r\n";
+    // Get the eventual response error
+    let service_error = res.extensions().get::<Error>();
+    let client_status_error = service_error.map(|se| se.client_status_and_error());
 
-//main function
-fn main() {
-    //Set database
-    if let Err(e) = set_database() {
-        println!("Error: {}", e);
-        return;
-    }
-
-    //start server and print port
-    let listener = TcpListener::bind(format!("0.0.0.0:8080")).unwrap();
-    println!("Server started at port 8080");
-
-    //handle the client
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                handle_client(stream);
-            }
-            Err(e) => {
-                println!("Error: {}", e);
-            }
-        }
-    }
-}
-
-//handle_client function
-fn handle_client(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-    let mut request = String::new();
-
-    match stream.read(&mut buffer) {
-        Ok(size) => {
-            request.push_str(String::from_utf8_lossy(&buffer[..size]).as_ref());
-
-            let (status_line, content) = match &*request {
-                r if r.starts_with("POST /users") => handle_post_request(r),
-                r if r.starts_with("GET /users/") => handle_get_request(r),
-                r if r.starts_with("GET /users") => handle_get_all_request(r),
-                r if r.starts_with("PUT /users/") => handle_put_request(r),
-                r if r.starts_with("DELETE /users/") => handle_delete_request(r),
-                _ => (NOT_FOUND.to_string(), "404 Not Found".to_string()),
-            };
-
-            stream.write_all(format!("{}{}", status_line, content).as_bytes()).unwrap();
-        }
-        Err(e) => {
-            println!("Error: {}", e);
-        }
-    }
-}
-
-//CONTROLLERS
-
-//handle_post_request function
-fn handle_post_request(request: &str) -> (String, String) {
-    match (get_user_request_body(&request), Client::connect(DB_URL, NoTls)) {
-        (Ok(user), Ok(mut client)) => {
-            client
-                .execute(
-                    "INSERT INTO users (name, email) VALUES ($1, $2)",
-                    &[&user.name, &user.email]
-                )
-                .unwrap();
-
-            (OK_RESPONSE.to_string(), "User created".to_string())
-        }
-        _ => (INTERNAL_SERVER_ERROR.to_string(), "Error".to_string()),
-    }
-}
-
-//handle_get_request function
-fn handle_get_request(request: &str) -> (String, String) {
-    match (get_id(&request).parse::<i32>(), Client::connect(DB_URL, NoTls)) {
-        (Ok(id), Ok(mut client)) =>
-            match client.query_one("SELECT * FROM users WHERE id = $1", &[&id]) {
-                Ok(row) => {
-                    let user = User {
-                        id: row.get(0),
-                        name: row.get(1),
-                        email: row.get(2),
-                    };
-
-                    (OK_RESPONSE.to_string(), serde_json::to_string(&user).unwrap())
+    // If client error, build the new response
+    let error_response = client_status_error
+        .as_ref()
+        .map(|(status_code, client_error)| {
+            let client_error_body = json!({
+                "error": {
+                    "type": client_error.as_ref(),
+                    "req_uuid": uuid.to_string(),
                 }
-                _ => (NOT_FOUND.to_string(), "User not found".to_string()),
-            }
+            });
 
-        _ => (INTERNAL_SERVER_ERROR.to_string(), "Error".to_string()),
-    }
+            println!("  ->> client_error_body: {client_error_body}");
+
+            // Build the new response from the client_error_body
+            (*status_code, Json(client_error_body)).into_response()
+        });
+
+    // Build and log the server log line
+    let client_error = client_status_error.unzip().1;
+    log_request(uuid, req_method, uri, ctx, service_error, client_error).await;
+
+    println!();
+    res
 }
 
-//handle_get_all_request function
-fn handle_get_all_request(request: &str) -> (String, String) {
-    match Client::connect(DB_URL, NoTls) {
-        Ok(mut client) => {
-            let mut users = Vec::new();
-
-            for row in client.query("SELECT * FROM users", &[]).unwrap() {
-                users.push(User {
-                    id: row.get(0),
-                    name: row.get(1),
-                    email: row.get(2),
-                });
-            }
-
-            (OK_RESPONSE.to_string(), serde_json::to_string(&users).unwrap())
-        }
-        _ => (INTERNAL_SERVER_ERROR.to_string(), "Error".to_string()),
-    }
+fn routes_static() -> Router {
+    Router::new().nest_service("/", get_service(ServeDir::new("./")))
 }
 
-//handle_put_request function
-fn handle_put_request(request: &str) -> (String, String) {
-    match
-    (
-        get_id(&request).parse::<i32>(),
-        get_user_request_body(&request),
-        Client::connect(DB_URL, NoTls),
-    )
-    {
-        (Ok(id), Ok(user), Ok(mut client)) => {
-            client
-                .execute(
-                    "UPDATE users SET name = $1, email = $2 WHERE id = $3",
-                    &[&user.name, &user.email, &id]
-                )
-                .unwrap();
-
-            (OK_RESPONSE.to_string(), "User updated".to_string())
-        }
-        _ => (INTERNAL_SERVER_ERROR.to_string(), "Error".to_string()),
-    }
+// region:  --- Routes Hello
+fn routes_hello() -> Router {
+    Router::new()
+        .route("/hello", get(handler_hello))
+        .route("/hello2/:name", get(handler_hello2))
+}
+#[derive(Debug, Deserialize)]
+struct HelloParams {
+    name: Option<String>,
 }
 
-//handle_delete_request function
-fn handle_delete_request(request: &str) -> (String, String) {
-    match (get_id(&request).parse::<i32>(), Client::connect(DB_URL, NoTls)) {
-        (Ok(id), Ok(mut client)) => {
-            let rows_affected = client.execute("DELETE FROM users WHERE id = $1", &[&id]).unwrap();
+// e.g., `/hello?name=Jen`
+async fn handler_hello(Query(params): Query<HelloParams>) -> impl IntoResponse {
+    println!("->> {:<12} - handler_hello - {params:?}", "HANDLER");
 
-            if rows_affected == 0 {
-                return (NOT_FOUND.to_string(), "User not found".to_string());
-            }
-
-            (OK_RESPONSE.to_string(), "User deleted".to_string())
-        }
-        _ => (INTERNAL_SERVER_ERROR.to_string(), "Error".to_string()),
-    }
+    let name = params.name.as_deref().unwrap_or("World!");
+    Html(format!("Hello <strong>{name}</strong>"))
 }
 
-//set_database function
-fn set_database() -> Result<(), PostgresError> {
-    //Connect to database
-    let mut client = Client::connect(DB_URL, NoTls)?;
+// e.g., `/hello2/Mike`
+async fn handler_hello2(Path(name): Path<String>) -> impl IntoResponse {
+    println!("->> {:<12} - handler_hello - {name:?}", "HANDLER");
 
-    //Create table
-    client.batch_execute(
-        "CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR NOT NULL,
-            email VARCHAR NOT NULL
-        )"
-    )?;
-    Ok(())
+    Html(format!("Hello <strong>{name}</strong>"))
 }
-
-//get_id function
-fn get_id(request: &str) -> &str {
-    request.split("/").nth(2).unwrap_or_default().split_whitespace().next().unwrap_or_default()
-}
-
-//deserialize user from request body with the id
-fn get_user_request_body(request: &str) -> Result<User, serde_json::Error> {
-    serde_json::from_str(request.split("\r\n\r\n").last().unwrap_or_default())
-}
+// endregion:   --- Routes Hello
