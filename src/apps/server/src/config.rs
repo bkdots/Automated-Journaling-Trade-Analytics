@@ -21,8 +21,8 @@ pub struct Config {
 	// pub TOKEN_KEY: Vec<u8>,
 	// pub TOKEN_DURATION_SEC: f64,
 	//
-	// // -- Db
-	// pub DB_URL: String,
+	// -- Db
+	pub DB_URL: String,
 
 	// -- Web
 	pub WEB_FOLDER: String,
@@ -36,9 +36,9 @@ impl Config {
 			//
 			// TOKEN_KEY: get_env_b64u_as_u8s("SERVICE_TOKEN_KEY")?,
 			// TOKEN_DURATION_SEC: get_env_parse("SERVICE_TOKEN_DURATION_SEC")?,
-			//
-			// // -- Db
-			// DB_URL: get_env("SERVICE_DB_URL")?,
+
+			// -- Db
+			DB_URL: get_env("SERVICE_DB_URL")?,
 
 			// -- Web
 			WEB_FOLDER: get_env("SERVICE_WEB_FOLDER")?,

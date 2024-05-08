@@ -1,22 +1,11 @@
 use serde::Serialize;
-use crate::model::store;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Debug, Serialize)]
 pub enum Error {
-	// -- Modules
-	Store(store::Error),
+	FailToCreatePool(String),
 }
-
-// region:	  --- Froms
-impl From<store::Error> for Error {
-	fn from(val: store::Error) -> Self {
-		Self::Store(val)
-	}
-}
-
-// endregion: --- Froms
 
 // region:    --- Error Boilerplate
 impl core::fmt::Display for Error {
