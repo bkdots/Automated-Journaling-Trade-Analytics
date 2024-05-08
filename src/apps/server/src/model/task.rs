@@ -60,10 +60,17 @@ impl TaskBmc {
 		Ok(task)
 	}
 
-	// pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Task>> {
-	// 	base::list::<Self, _>(ctx, mm).await
-	// }
-	//
+	pub async fn list(_ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Task>> {
+		// base::list::<Self, _>(ctx, mm).await
+		let db = mm.db();
+
+		let tasks: Vec<Task> = sqlx::query_as("SELECT * FROM task ORDER BY id")
+			.fetch_all(db)
+			.await?;
+
+		Ok(tasks)
+	}
+
 	// pub async fn update(
 	// 	ctx: &Ctx,
 	// 	mm: &ModelManager,
@@ -124,59 +131,59 @@ mod tests {
 		Ok(())
 	}
 
-// 	#[serial]
-// 	#[tokio::test]
-// 	async fn test_get_err_not_found() -> Result<()> {
-// 		// -- Setup & Fixtures
-// 		let mm = _dev_utils::init_test().await;
-// 		let ctx = Ctx::root_ctx();
-// 		let fx_id = 100;
-//
-// 		// -- Exec
-// 		let res = TaskBmc::get(&ctx, &mm, fx_id).await;
-//
-// 		// -- Check
-// 		assert!(
-// 			matches!(
-// 				res,
-// 				Err(Error::EntityNotFound {
-// 					entity: "task",
-// 					id: 100
-// 				})
-// 			),
-// 			"EntityNotFound not matching"
-// 		);
-//
-// 		Ok(())
-// 	}
-//
-// 	#[serial]
-// 	#[tokio::test]
-// 	async fn test_list_ok() -> Result<()> {
-// 		// -- Setup & Fixtures
-// 		let mm = _dev_utils::init_test().await;
-// 		let ctx = Ctx::root_ctx();
-// 		let fx_titles = &["test_list_ok-task 01", "test_list_ok-task 02"];
-// 		_dev_utils::seed_tasks(&ctx, &mm, fx_titles).await?;
-//
-// 		// -- Exec
-// 		let tasks = TaskBmc::list(&ctx, &mm).await?;
-//
-// 		// -- Check
-// 		let tasks: Vec<Task> = tasks
-// 			.into_iter()
-// 			.filter(|t| t.title.starts_with("test_list_ok-task"))
-// 			.collect();
-// 		assert_eq!(tasks.len(), 2, "number of seeded tasks.");
-//
-// 		// -- Clean
-// 		for task in tasks.iter() {
-// 			TaskBmc::delete(&ctx, &mm, task.id).await?;
-// 		}
-//
-// 		Ok(())
-// 	}
-//
+	#[serial]
+	#[tokio::test]
+	async fn test_get_err_not_found() -> Result<()> {
+		// -- Setup & Fixtures
+		let mm = _dev_utils::init_test().await;
+		let ctx = Ctx::root_ctx();
+		let fx_id = 100;
+
+		// -- Exec
+		let res = TaskBmc::get(&ctx, &mm, fx_id).await;
+
+		// -- Check
+		assert!(
+			matches!(
+				res,
+				Err(Error::EntityNotFound {
+					entity: "task",
+					id: 100
+				})
+			),
+			"EntityNotFound not matching"
+		);
+
+		Ok(())
+	}
+
+	#[serial]
+	#[tokio::test]
+	async fn test_list_ok() -> Result<()> {
+		// -- Setup & Fixtures
+		let mm = _dev_utils::init_test().await;
+		let ctx = Ctx::root_ctx();
+		let fx_titles = &["test_list_ok-task 01", "test_list_ok-task 02"];
+		_dev_utils::seed_tasks(&ctx, &mm, fx_titles).await?;
+
+		// -- Exec
+		let tasks = TaskBmc::list(&ctx, &mm).await?;
+
+		// -- Check
+		let tasks: Vec<Task> = tasks
+			.into_iter()
+			.filter(|t| t.title.starts_with("test_list_ok-task"))
+			.collect();
+		assert_eq!(tasks.len(), 2, "number of seeded tasks.");
+
+		// -- Clean
+		for task in tasks.iter() {
+			TaskBmc::delete(&ctx, &mm, task.id).await?;
+		}
+
+		Ok(())
+	}
+
 // 	#[serial]
 // 	#[tokio::test]
 // 	async fn test_update_ok() -> Result<()> {
@@ -206,31 +213,31 @@ mod tests {
 //
 // 		Ok(())
 // 	}
-//
-// 	#[serial]
-// 	#[tokio::test]
-// 	async fn test_delete_err_not_found() -> Result<()> {
-// 		// -- Setup & Fixtures
-// 		let mm = _dev_utils::init_test().await;
-// 		let ctx = Ctx::root_ctx();
-// 		let fx_id = 100;
-//
-// 		// -- Exec
-// 		let res = TaskBmc::delete(&ctx, &mm, fx_id).await;
-//
-// 		// -- Check
-// 		assert!(
-// 			matches!(
-// 				res,
-// 				Err(Error::EntityNotFound {
-// 					entity: "task",
-// 					id: 100
-// 				})
-// 			),
-// 			"EntityNotFound not matching"
-// 		);
-//
-// 		Ok(())
-// 	}
+
+	#[serial]
+	#[tokio::test]
+	async fn test_delete_err_not_found() -> Result<()> {
+		// -- Setup & Fixtures
+		let mm = _dev_utils::init_test().await;
+		let ctx = Ctx::root_ctx();
+		let fx_id = 100;
+
+		// -- Exec
+		let res = TaskBmc::delete(&ctx, &mm, fx_id).await;
+
+		// -- Check
+		assert!(
+			matches!(
+				res,
+				Err(Error::EntityNotFound {
+					entity: "task",
+					id: 100
+				})
+			),
+			"EntityNotFound not matching"
+		);
+
+		Ok(())
+	}
 }
 // endregion: --- Tests
