@@ -70,3 +70,22 @@ every source code change recompiles it and run it again
 - -c = clear in between in each recompile
 - -w src/ = watch only the source folder
 - -x run = execute
+
+# Run docker sql db locally for development
+```pwsh
+    # Start postgresql server docker image:
+        docker run --rm --name pg -p 5432:5432 \
+        -e POSTGRES_PASSWORD=welcome \
+        postgres:16
+
+    # (optional) To have a psql terminal on pg. 
+    # In another terminal (tab) run psql:
+    docker exec -it -u postgres pg psql
+    
+                /c app_db = connect to db
+                /d = all tables
+
+    # (optional) For pg to print all sql statements.
+    # In psql command line started above.
+    ALTER DATABASE postgres SET log_statement = 'all';
+```
