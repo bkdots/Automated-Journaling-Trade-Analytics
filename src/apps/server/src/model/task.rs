@@ -47,10 +47,19 @@ impl TaskBmc {
 		Ok(id)
 	}
 
-	// pub async fn get(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Task> {
-	// 	base::get::<Self, _>(ctx, mm, id).await
-	// }
-	//
+	pub async fn get(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Task> {
+		let db = mm.db();
+
+		let task: Task = sqlx::query_as("SELECT * FROM task WHERE id = $1")
+			.bind(id)
+			.fetch_optional(db)
+			.await?
+			.ok_or(Error::EntityNotFound { entity: "task", id })?;
+		// base::get::<Self, _>(ctx, mm, id).await
+
+		Ok(task)
+	}
+
 	// pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Task>> {
 	// 	base::list::<Self, _>(ctx, mm).await
 	// }
@@ -64,9 +73,22 @@ impl TaskBmc {
 	// 	base::update::<Self, _>(ctx, mm, id, task_u).await
 	// }
 	//
-	// pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
-	// 	base::delete::<Self>(ctx, mm, id).await
-	// }
+	pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
+		// base::delete::<Self>(ctx, mm, id).await
+		let db = mm.db();
+
+		let count = sqlx::query("DELETE FROM task where id = $1")
+			.bind(id)
+			.execute(db)
+			.await?
+			.rows_affected();
+
+		if count == 0 {
+			return Err(Error::EntityNotFound { entity: "task", id });
+		}
+
+		Ok(())
+	}
 }
 // endregion: --- TaskBmc
 
@@ -76,7 +98,7 @@ mod tests {
 	use super::*;
 	use crate::_dev_utils;
 	use anyhow::Result;
-	// use serial_test::serial;
+	use serial_test::serial;
 
 	#[serial]
 	#[tokio::test]
@@ -93,22 +115,11 @@ mod tests {
 		let id = TaskBmc::create(&ctx, &mm, task_c).await?;
 
 		// -- Check
-		let (title,): (String,) =
-			sqlx::query_as("SELECT title from task where id = $1")
-				.bind(id)
-				.fetch_one(mm.db())
-				.await?;
-		// let task = TaskBmc::get(&ctx, &mm, id).await?;
-		assert_eq!(title, fx_title);
+		let task = TaskBmc::get(&ctx, &mm, id).await?;
+		assert_eq!(task.title, fx_title);
 
 		// -- Clean
-		let count = sqlx::query("DELETE FROM task WHERE id = $1")
-			.bind(id)
-			.execute(mm.db())
-			.await?
-			.rows_affected();
-		assert_eq!(count, 1, "Did not delete 1 row?");
-		// TaskBmc::delete(&ctx, &mm, id).await?;
+		TaskBmc::delete(&ctx, &mm, id).await?;
 
 		Ok(())
 	}
