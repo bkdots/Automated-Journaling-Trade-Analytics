@@ -89,3 +89,14 @@ every source code change recompiles it and run it again
     # In psql command line started above.
     ALTER DATABASE postgres SET log_statement = 'all';
 ```
+
+# Unit test (watch)
+```shell
+    cargo watch -q -c -x "test -- --nocapture"
+    
+    # Specific test
+    cargo watch -q -c -x "test test_create_ok -- --nocapture"
+
+    # Specific test with filter.
+    cargo watch -q -c -x "test -p lib-core test_create -- --nocapture"
+```
