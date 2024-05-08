@@ -53,7 +53,7 @@
 
 # Run Server and recompile for quick testing in dev
 ```pwsh
-    cargo watch -q -c -w src/ -x run
+    cargo watch -q -c -w src/ -w .cargo/ -x "run"
 ```
 every source code change recompiles it and run it again
 - -q = quit
@@ -63,7 +63,7 @@ every source code change recompiles it and run it again
 
 # Run front end 
 ```pwsh
-    cargo watch -q -c -w tests/ -x "test -q quick_dev -- --nocapture"
+    cargo watch -q -c -w examples/ -x "run --example quick_dev"
 ```
 every source code change recompiles it and run it again
 - -q = quit
