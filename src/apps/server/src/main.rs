@@ -22,6 +22,8 @@ use crate::web::mw_auth::mw_ctx_resolve;
 use crate::web::mw_res_map::mw_reponse_map;
 use crate::web::{routes_login, routes_static};
 use axum::{middleware, Router};
+use axum::routing::get;
+use axum::response::Html;
 use std::net::SocketAddr;
 use tower_cookies::CookieManagerLayer;
 use tracing::info;
