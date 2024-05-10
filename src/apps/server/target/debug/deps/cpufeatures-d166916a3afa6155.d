@@ -1,0 +1,8 @@
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libcpufeatures-d166916a3afa6155.rmeta: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/aarch64.rs
+
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libcpufeatures-d166916a3afa6155.rlib: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/aarch64.rs
+
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/cpufeatures-d166916a3afa6155.d: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/aarch64.rs
+
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/lib.rs:
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cpufeatures-0.2.12/src/aarch64.rs:

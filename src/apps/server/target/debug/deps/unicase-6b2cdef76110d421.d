@@ -1,0 +1,10 @@
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libunicase-6b2cdef76110d421.rmeta: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/ascii.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/mod.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/map.rs
+
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libunicase-6b2cdef76110d421.rlib: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/ascii.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/mod.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/map.rs
+
+/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/unicase-6b2cdef76110d421.d: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/ascii.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/mod.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/map.rs
+
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/lib.rs:
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/ascii.rs:
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/mod.rs:
+/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/unicase-2.7.0/src/unicode/map.rs:
