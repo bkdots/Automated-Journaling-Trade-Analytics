@@ -1,22 +1,9 @@
-use serde::Serialize;
-
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
 pub enum Error {
-	// -- Key
-	KeyFailHmac,
-
-	// -- Pwd
-	PwdNotMatching,
-
-	// -- Token
-	TokenInvalidFormat,
-	TokenCannotDecodeIdent,
-	TokenCannotDecodeExp,
-	TokenSignatureNotMatching,
-	TokenExpNotIso,
-	TokenExpired,
+	MissingEnv(&'static str),
+	WrongFormat(&'static str),
 }
 
 // region:    --- Error Boilerplate

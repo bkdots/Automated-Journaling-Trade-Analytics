@@ -62,7 +62,7 @@ pub async fn mw_reponse_map(
 		web_error,
 		client_error,
 	)
-		.await;
+	.await;
 
 	debug!("\n");
 

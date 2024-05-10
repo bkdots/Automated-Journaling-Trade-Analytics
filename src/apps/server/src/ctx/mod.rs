@@ -6,13 +6,12 @@ pub use self::error::{Error, Result};
 
 // endregion: --- Modules
 
-// Used to identify the user and the request context
 #[derive(Clone, Debug)]
 pub struct Ctx {
 	user_id: i64,
 }
 
-// Constructor.
+// Constructors.
 impl Ctx {
 	pub fn root_ctx() -> Self {
 		Ctx { user_id: 0 }

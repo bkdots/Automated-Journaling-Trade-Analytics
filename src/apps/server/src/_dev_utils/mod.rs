@@ -12,7 +12,6 @@ use tracing::info;
 
 /// Initialize environment for local development.
 /// (for early development, will be called from main()).
-/// TODO
 pub async fn init_dev() {
 	static INIT: OnceCell<()> = OnceCell::const_new();
 
