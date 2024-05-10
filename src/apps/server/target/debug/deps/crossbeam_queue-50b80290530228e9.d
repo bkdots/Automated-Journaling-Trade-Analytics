@@ -1,9 +1,0 @@
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libcrossbeam_queue-50b80290530228e9.rmeta: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/array_queue.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/seg_queue.rs
-
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libcrossbeam_queue-50b80290530228e9.rlib: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/array_queue.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/seg_queue.rs
-
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/crossbeam_queue-50b80290530228e9.d: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/array_queue.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/seg_queue.rs
-
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/lib.rs:
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/array_queue.rs:
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossbeam-queue-0.3.11/src/seg_queue.rs:

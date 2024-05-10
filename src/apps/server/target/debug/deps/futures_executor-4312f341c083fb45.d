@@ -1,9 +1,0 @@
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libfutures_executor-4312f341c083fb45.rmeta: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/local_pool.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/enter.rs
-
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/libfutures_executor-4312f341c083fb45.rlib: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/local_pool.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/enter.rs
-
-/Users/BrycePersonal/Documents/projects/github/Automated-Journaling-Trade-Analytics/src/apps/server/target/debug/deps/futures_executor-4312f341c083fb45.d: /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/lib.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/local_pool.rs /Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/enter.rs
-
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/lib.rs:
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/local_pool.rs:
-/Users/BrycePersonal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-executor-0.3.30/src/enter.rs:
