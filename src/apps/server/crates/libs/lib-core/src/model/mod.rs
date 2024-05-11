@@ -26,6 +26,7 @@ mod store;
 
 pub mod agent;
 pub mod journal;
+pub mod exchange;
 pub mod conv;
 pub mod conv_msg;
 pub mod conv_user;
