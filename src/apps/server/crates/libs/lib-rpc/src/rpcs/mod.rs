@@ -4,6 +4,7 @@ pub mod agent_rpc;
 pub mod conv_rpc;
 pub mod journal_rpc;
 pub mod exchange_rpc;
+pub mod tag_rpc;
 mod macro_utils;
 mod prelude;
 
