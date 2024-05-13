@@ -28,6 +28,8 @@ pub mod agent;
 pub mod journal;
 pub mod exchange;
 pub mod tag;
+// pub mod trade;
+pub mod tradetag;
 pub mod conv;
 pub mod conv_msg;
 pub mod conv_user;
