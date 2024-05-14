@@ -268,11 +268,17 @@ CREATE TABLE trade_tag
     tag_id BIGINT NOT NULL,
     PRIMARY KEY (trade_id, tag_id),
 
-    -- Foreign Keys
-    FOREIGN KEY (trade_id) REFERENCES trade(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(id)
-        ON DELETE CASCADE
+--     -- Foreign Keys
+--     FOREIGN KEY (trade_id) REFERENCES trade(id)
+--         ON DELETE CASCADE,
+--     FOREIGN KEY (tag_id) REFERENCES tag(id)
+--         ON DELETE CASCADE
+
+    -- Timestamps
+    cid bigint NOT NULL,
+    ctime timestamp with time zone NOT NULL,
+    mid bigint NOT NULL,
+    mtime timestamp with time zone NOT NULL
 );
 ALTER TABLE trade_tag ADD CONSTRAINT fk_trade_tag_trade
     FOREIGN KEY (trade_id) REFERENCES "trade"(id)
