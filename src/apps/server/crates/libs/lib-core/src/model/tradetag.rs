@@ -7,7 +7,7 @@ use crate::model::Result;
 use lib_utils::time::Rfc3339;
 use modql::field::Fields;
 use modql::filter::{
-    FilterNodes, ListOptions, OpValsInt64, OpValsString, OpValsValue, OpValsBool
+    FilterNodes, ListOptions, OpValsInt64, OpValsValue
 };
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
@@ -132,7 +132,6 @@ mod tests {
     use super::*;
     use crate::_dev_utils::{self};
     use crate::ctx::Ctx;
-    use modql::filter::OpValString;
     use serial_test::serial;
 
     #[serial]

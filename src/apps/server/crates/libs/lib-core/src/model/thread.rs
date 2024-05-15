@@ -150,7 +150,6 @@ mod tests {
     use super::*;
     use crate::_dev_utils::{self};
     use crate::ctx::Ctx;
-    use modql::filter::OpValString;
     use serial_test::serial;
 
     #[serial]
