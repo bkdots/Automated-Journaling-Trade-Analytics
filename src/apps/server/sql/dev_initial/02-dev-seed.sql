@@ -5,13 +5,24 @@ INSERT INTO "user"
 
 -- User demo1
 INSERT INTO "user" 
-    (username, cid, ctime, mid, mtime) VALUES 
-    ('demo1',  0,   now(), 0,   now());
+    (id, username, cid, ctime, mid, mtime) VALUES
+    (1, 'demo1',  0,   now(), 0,   now()),
+    (2, 'demo2',  0,   now(), 0,   now());
 
 -- Agent mock-01 (with 'parrot' model) (id: 100)
 INSERT INTO "agent"    
     (id,  owner_id, name,      cid, ctime, mid, mtime) VALUES
     (100, 0,        'mock-01', 0,   now(), 0,   now());
+
+-- Sample data for the tag table
+INSERT INTO tag (
+    id, user_id, tag_name, tag_type, description, cid, ctime, mid, mtime
+) VALUES
+      (0, 0, 'Strong Entry Signal', 'Entry', 'Tag for trades with a strong entry signal', 1, '2024-05-01 09:30:00+00', 1, '2024-05-01 09:30:00+00'),
+      (1, 0, 'Profit Exit', 'Exit', 'Tag for trades exited at a profit', 2, '2024-05-02 09:30:00+00', 2, '2024-05-02 09:30:00+00'),
+      (2, 0, 'Poor Management', 'Management', 'Tag for trades with poor management', 3, '2024-05-03 09:30:00+00', 3, '2024-05-03 09:30:00+00'),
+      (3, 0, 'Entry Mistake', 'Mistake', 'Tag for trades with an entry mistake', 4, '2024-05-04 09:30:00+00', 4, '2024-05-04 09:30:00+00'),
+      (4, 0, 'Exit Mistake', 'Mistake', 'Tag for trades with an exit mistake', 5, '2024-05-05 09:30:00+00', 5, '2024-05-05 09:30:00+00');
 
 
 -- Sample data for the journal table
@@ -58,3 +69,10 @@ INSERT INTO trade (
 (4, 0, 0, 'Option', 'MSFT', '2024-05-05 14:30:00+00', '2024-05-05 15:30:00+00', 'Buy',
  'Put', 100, 250.00, 8, 245.00, 255.00, 252.00, 2.00, 'Option trade example', 253.00, 248.00, FALSE,
  75, 4, 4, 4, 4, 16.00, 24.00, 3.2, '2024-05-05 01:00:00+00', 5, '2024-05-05 14:30:00+00', 5, '2024-05-05 15:30:00+00');
+
+-- Sample data for the trade_tag table
+INSERT INTO trade_tag (
+    trade_id, tag_id, cid, ctime, mid, mtime
+) VALUES
+      (1, 0, 1, '2024-05-01 09:30:00+00', 1, '2024-05-01 09:30:00+00'),
+      (1, 2, 1, '2024-05-02 09:30:00+00', 1, '2024-05-02 09:30:00+00');
