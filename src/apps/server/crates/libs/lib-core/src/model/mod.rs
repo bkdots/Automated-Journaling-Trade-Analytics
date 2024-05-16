@@ -28,7 +28,7 @@ pub mod agent;
 pub mod journal;
 pub mod exchange;
 pub mod tag;
-// pub mod trade;
+pub mod trade;
 pub mod tradetag;
 pub mod thread;
 pub mod conv;

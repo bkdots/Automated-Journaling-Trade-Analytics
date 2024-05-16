@@ -5,7 +5,7 @@ pub mod conv_rpc;
 pub mod journal_rpc;
 pub mod exchange_rpc;
 pub mod tag_rpc;
-// pub mod trade_rpc;
+pub mod trade_rpc;
 pub mod tradetag_rpc;
 pub mod thread_rpc;
 mod macro_utils;
