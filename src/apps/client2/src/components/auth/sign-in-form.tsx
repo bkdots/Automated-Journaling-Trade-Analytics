@@ -23,13 +23,13 @@ import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
 
 const schema = zod.object({
-  email: zod.string().min(1, { message: 'Email is required' }).email(),
-  password: zod.string().min(1, { message: 'Password is required' }),
+  username: zod.string().min(1, { message: 'Email is required' }).email(),
+  pwd: zod.string().min(1, { message: 'Password is required' }),
 });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: 'sofia@devias.io', password: 'Secret1' } satisfies Values;
+const defaultValues = { username: 'demo1@gmail.com', pwd: 'welcome' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element {
   const router = useRouter();
@@ -84,20 +84,20 @@ export function SignInForm(): React.JSX.Element {
         <Stack spacing={2}>
           <Controller
             control={control}
-            name="email"
+            name="username"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.email)}>
+              <FormControl error={Boolean(errors.username)}>
                 <InputLabel>Email address</InputLabel>
                 <OutlinedInput {...field} label="Email address" type="email" />
-                {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
+                {errors.username ? <FormHelperText>{errors.username.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
           <Controller
             control={control}
-            name="password"
+            name="pwd"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.password)}>
+              <FormControl error={Boolean(errors.pwd)}>
                 <InputLabel>Password</InputLabel>
                 <OutlinedInput
                   {...field}
@@ -123,7 +123,7 @@ export function SignInForm(): React.JSX.Element {
                   label="Password"
                   type={showPassword ? 'text' : 'password'}
                 />
-                {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
+                {errors.pwd ? <FormHelperText>{errors.pwd.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
