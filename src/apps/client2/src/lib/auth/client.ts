@@ -28,8 +28,8 @@ export interface SignInWithOAuthParams {
 }
 
 export interface SignInWithPasswordParams {
-  email: string;
-  password: string;
+  username: string;
+  pwd: string;
 }
 
 export interface ResetPasswordParams {
@@ -38,13 +38,20 @@ export interface ResetPasswordParams {
 
 class AuthClient {
   async signUp(_: SignUpParams): Promise<{ error?: string }> {
-    // Make API request
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(_),
+    });
 
-    // We do not handle the API, so we'll just generate a token and store it in localStorage.
-    const token = generateToken();
-    localStorage.setItem('custom-auth-token', token);
+    const data = await response.json();
 
-    return {};
+    if (response.ok) {
+      localStorage.setItem('custom-auth-token', data.token);
+      return {};
+    }
+
+    return { error: data.error.message };
   }
 
   async signInWithOAuth(_: SignInWithOAuthParams): Promise<{ error?: string }> {
@@ -52,19 +59,24 @@ class AuthClient {
   }
 
   async signInWithPassword(params: SignInWithPasswordParams): Promise<{ error?: string }> {
-    const { email, password } = params;
+    let { username, pwd } = params;
+    // TODO add email
+    username = username.split('@')[0];
 
-    // Make API request
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, pwd }),
+    });
 
-    // We do not handle the API, so we'll check if the credentials match with the hardcoded ones.
-    if (email !== 'sofia@devias.io' || password !== 'Secret1') {
-      return { error: 'Invalid credentials' };
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('custom-auth-token', data.token);
+      return {};
     }
 
-    const token = generateToken();
-    localStorage.setItem('custom-auth-token', token);
-
-    return {};
+    return { error: data.error.message };
   }
 
   async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
