@@ -26,7 +26,7 @@ mod store;
 
 pub mod agent;
 pub mod journal;
-pub mod exchange;
+pub mod apikey;
 pub mod tag;
 pub mod trade;
 pub mod tradetag;
