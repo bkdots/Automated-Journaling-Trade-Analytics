@@ -1,5 +1,6 @@
+'use client';
 import * as React from 'react';
-import type { Metadata } from 'next';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Pagination from '@mui/material/Pagination';
@@ -9,67 +10,54 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
-import dayjs from 'dayjs';
 
-import { config } from '@/config';
 import { ExchangeCard } from '@/components/dashboard/exchanges/exchanges-card';
 import type { Exchange } from '@/components/dashboard/exchanges/exchanges-card';
 import { ExchangesFilters } from '@/components/dashboard/exchanges/exchanges-filters';
 
-export const metadata = { title: `Integrations | Dashboard | ${config.site.name}` } satisfies Metadata;
-
-const exchanges = [
-  {
-    id: 'INTEG-006',
-    title: 'Binance',
-    description: 'Swing trading futures',
-    logo: '/assets/logo-dropbox.png',
-    installs: 594,
-    updatedAt: dayjs().subtract(12, 'minute').toDate(),
-  },
-  {
-    id: 'INTEG-005',
-    title: 'Bybit',
-    description: 'Day trading futures',
-    logo: '/assets/logo-medium.png',
-    installs: 625,
-    updatedAt: dayjs().subtract(43, 'minute').subtract(1, 'hour').toDate(),
-  },
-  {
-    id: 'INTEG-004',
-    title: 'Vertex',
-    description: 'Onchain Day trading futures',
-    logo: '/assets/logo-slack.png',
-    installs: 857,
-    updatedAt: dayjs().subtract(50, 'minute').subtract(3, 'hour').toDate(),
-  },
-  {
-    id: 'INTEG-003',
-    title: 'Lyft',
-    description: 'Lyft is an on-demand transportation company based in San Francisco, California.',
-    logo: '/assets/logo-lyft.png',
-    installs: 406,
-    updatedAt: dayjs().subtract(7, 'minute').subtract(4, 'hour').subtract(1, 'day').toDate(),
-  },
-  {
-    id: 'INTEG-002',
-    title: 'GitHub',
-    description: 'GitHub is a web-based hosting service for version control of code using Git.',
-    logo: '/assets/logo-github.png',
-    installs: 835,
-    updatedAt: dayjs().subtract(31, 'minute').subtract(4, 'hour').subtract(5, 'day').toDate(),
-  },
-  {
-    id: 'INTEG-001',
-    title: 'Squarespace',
-    description: 'Squarespace provides software as a service for website building and hosting. Headquartered in NYC.',
-    logo: '/assets/logo-squarespace.png',
-    installs: 435,
-    updatedAt: dayjs().subtract(25, 'minute').subtract(6, 'hour').subtract(6, 'day').toDate(),
-  },
-] satisfies Exchange[];
-
 export default function Page(): React.JSX.Element {
+  const [exchanges, setExchanges] = useState<Exchange[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchExchanges() {
+      try {
+        const response = await fetch('/api/rpc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: 'list_exchanges',
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch exchanges');
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error.message || 'Unknown error');
+        }
+
+        const exchangesArray: Exchange[] = Object.values(data.result.data);
+        setExchanges(exchangesArray);
+      } catch (error) {
+        console.error('Error fetching exchanges:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchExchanges();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
