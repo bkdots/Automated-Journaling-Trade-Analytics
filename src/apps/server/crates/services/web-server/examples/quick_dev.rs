@@ -88,6 +88,17 @@ async fn main() -> Result<()> {
 	result.print().await?;
 	let conv_msg_id = result.json_value::<i64>("/result/data/id")?;
 
+	// -- Get Exchanges
+	let req_list_exchanges = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "list_exchanges",
+		})
+	);
+	let result = req_list_exchanges.await?;
+	result.print().await?;
+
 	// -- Logoff
 	let req_logoff = hc.do_post(
 		"/api/logoff",
