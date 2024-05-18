@@ -1,26 +1,26 @@
 use crate::rpcs::prelude::*;
-use lib_core::model::exchange::{
-    Exchange, ExchangeBmc, ExchangeFilter, ExchangeForCreate, ExchangeForUpdate,
+use lib_core::model::apikey::{
+	ApiKey, ApiKeyBmc, ApiKeyFilter, ApiKeyForCreate, ApiKeyForUpdate,
 };
 
 pub fn rpc_router() -> RpcRouter {
     rpc_router!(
 		// Same as RpcRouter::new().add...
-		create_exchange,
-		get_exchange,
-		list_exchanges,
-		update_exchange,
-		delete_exchange,
+		create_apikey,
+		get_apikey,
+		list_apikeys,
+		update_apikey,
+		delete_apikey,
 	)
 }
 
 generate_common_rpc_fns!(
-	Bmc: ExchangeBmc,
-	Entity: Exchange,
-	ForCreate: ExchangeForCreate,
-	ForUpdate: ExchangeForUpdate,
-	Filter: ExchangeFilter,
-	Suffix: exchange
+	Bmc: ApiKeyBmc,
+	Entity: ApiKey,
+	ForCreate: ApiKeyForCreate,
+	ForUpdate: ApiKeyForUpdate,
+	Filter: ApiKeyFilter,
+	Suffix: apikey
 );
 
 // /// Returns conv_msg

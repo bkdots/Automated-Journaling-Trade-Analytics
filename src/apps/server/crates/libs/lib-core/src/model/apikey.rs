@@ -14,25 +14,29 @@ use serde_with::serde_as;
 use sqlx::types::time::OffsetDateTime;
 use sqlx::FromRow;
 
-// region:    --- Exchange Types
+// region:    --- ApiKey Types
 
-/// Trait to implement on entities that have a exchange_id
-/// This will allow Ctx to be upgraded with the corresponding exchange_id for
+/// Trait to implement on entities that have a apikey_id
+/// This will allow Ctx to be upgraded with the corresponding apikey_id for
 /// future access control.
-pub trait ExchangeScoped {
-    fn exchange_id(&self) -> i64;
+pub trait ApiKeyScoped {
+    fn apikey_id(&self) -> i64;
 }
 
 #[serde_as]
 #[derive(Debug, Clone, Fields, FromRow, Serialize)]
-pub struct Exchange {
+pub struct ApiKey {
     pub id: i64,
 
+    // -- Relations
+    pub user_id: i64,
+    pub exchange_id: i64,
+
     // -- Properties
-    pub exchange_name: Option<String>,
-    pub image_id: Option<String>,
-    pub exchange_referral: Option<String>,
-    pub instruction: Option<String>,
+    pub title: Option<String>,
+    pub api_key_value: Option<String>,
+    pub api_key_secret: Option<String>,
+    pub api_referral: Option<bool>,
 
     // -- Timestamps
     // creator user_id and time
@@ -46,29 +50,31 @@ pub struct Exchange {
 }
 
 #[derive(Fields, Deserialize, Default)]
-pub struct ExchangeForCreate {
-    pub exchange_name: Option<String>,
-    pub image_id: Option<String>,
-    pub exchange_referral: Option<String>,
-    pub instruction: Option<String>,
+pub struct ApiKeyForCreate {
+    pub user_id: i64,
+    pub exchange_id: i64,
+    pub title: Option<String>,
+    pub api_key_value: Option<String>,
+    pub api_key_secret: Option<String>,
 }
 
 #[derive(Fields, Deserialize, Default)]
-pub struct ExchangeForUpdate {
-    pub exchange_name: Option<String>,
-    pub image_id: Option<String>,
-    pub exchange_referral: Option<String>,
-    pub instruction: Option<String>,
+pub struct ApiKeyForUpdate {
+    pub title: Option<String>,
+    pub api_key_value: Option<String>,
+    pub api_key_secret: Option<String>,
 }
 
 #[derive(FilterNodes, Deserialize, Default, Debug)]
-pub struct ExchangeFilter {
+pub struct ApiKeyFilter {
     pub id: Option<OpValsInt64>,
 
-    pub exchange_name: Option<OpValsString>,
-    pub image_id: Option<OpValsString>,
-    pub exchange_referral: Option<OpValsString>,
-    pub instruction: Option<OpValsString>,
+    pub user_id: Option<OpValsInt64>,
+    pub exchange_id: Option<OpValsInt64>,
+
+    pub title: Option<OpValsString>,
+    pub api_key_value: Option<OpValsString>,
+    pub api_key_secret: Option<OpValsString>,
 
     pub cid: Option<OpValsInt64>,
     #[modql(to_sea_value_fn = "time_to_sea_value")]
@@ -78,30 +84,30 @@ pub struct ExchangeFilter {
     pub mtime: Option<OpValsValue>,
 }
 
-// endregion: --- Exchange Types
+// endregion: --- ApiKey Types
 
-// region:    --- ExchangeBmc
+// region:    --- ApiKeyBmc
 
-pub struct ExchangeBmc;
+pub struct ApiKeyBmc;
 
-impl DbBmc for ExchangeBmc {
-    const TABLE: &'static str = "exchange";
+impl DbBmc for ApiKeyBmc {
+    const TABLE: &'static str = "api_key";
 }
 
-// This will generate the `impl ExchangeBmc {...}` with the default CRUD functions.
+// This will generate the `impl ApiKeyBmc {...}` with the default CRUD functions.
 generate_common_bmc_fns!(
-	Bmc: ExchangeBmc,
-	Entity: Exchange,
-	ForCreate: ExchangeForCreate,
-	ForUpdate: ExchangeForUpdate,
-	Filter: ExchangeFilter
+	Bmc: ApiKeyBmc,
+	Entity: ApiKey,
+	ForCreate: ApiKeyForCreate,
+	ForUpdate: ApiKeyForUpdate,
+	Filter: ApiKeyFilter
 );
 
 // TODO hash the secret
 // TODO check if its a referral api key
-// Additional ExchangeBmc methods to manage the `ExchangeMsg` constructs.
-// impl ExchangeBmc {
-/// Add a `Trade` to a `Exchange`
+// Additional ApiKeyBmc methods to manage the `ApiKeyMsg` constructs.
+// impl ApiKeyBmc {
+/// Add a `Trade` to a `ApiKey`
 ///
 // For access constrol, we will add:
 // #[ctx_add(conv, space)]
@@ -134,7 +140,7 @@ generate_common_bmc_fns!(
 // }
 // }
 
-// endregion: --- ExchangeBmc
+// endregion: --- ApiKeyBmc
 
 // region:    --- Tests
 
@@ -154,33 +160,32 @@ mod tests {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
         let ctx = Ctx::root_ctx();
-        let fx_exchange_name = "test_create_ok exchange name";
-        let fx_image_id = "test_create_ok image id";
-        let fx_exchange_referral = "test_create_ok exchange referral";
-        let fx_instruction = "test_create_ok instructions";
+        let fx_title = "test_create_ok apikey title";
+        let fx_api_key_value = "test_create_ok api key value";
+        let fx_api_key_secret = "test_create_ok api key secret";
 
         // -- Exec
-        let exchange_id = ExchangeBmc::create(
+        let apikey_id = ApiKeyBmc::create(
             &ctx,
             &mm,
-            ExchangeForCreate {
-                exchange_name: Some(fx_exchange_name.to_string()),
-                image_id: Some(fx_image_id.to_string()),
-                exchange_referral: Some(fx_exchange_referral.to_string()),
-                instruction: Some(fx_instruction.to_string()),
+            ApiKeyForCreate {
+                user_id: ctx.user_id(),
+                exchange_id: 0,
+                title: Some(fx_title.to_string()),
+                api_key_value: Some(fx_api_key_value.to_string()),
+                api_key_secret: Some(fx_api_key_secret.to_string()),
             },
         )
             .await?;
 
         // -- Check
-        let exchange: Exchange = ExchangeBmc::get(&ctx, &mm, exchange_id).await?;
-        assert_eq!(exchange.exchange_name.ok_or("exchange should have exchange name")?, fx_exchange_name);
-        assert_eq!(exchange.image_id.ok_or("exchange should have image id")?, fx_image_id);
-        assert_eq!(exchange.exchange_referral.ok_or("exchange should have exchange referral")?, fx_exchange_referral);
-        assert_eq!(exchange.instruction.ok_or("exchange should have instruction")?, fx_instruction);
+        let apikey: ApiKey = ApiKeyBmc::get(&ctx, &mm, apikey_id).await?;
+        assert_eq!(apikey.title.ok_or("apikey should have title")?, fx_title);
+        assert_eq!(apikey.api_key_value.ok_or("apikey should have value")?, fx_api_key_value);
+        assert_eq!(apikey.api_key_secret.ok_or("apikey should have secret")?, fx_api_key_secret);
 
         // -- Clean
-        ExchangeBmc::delete(&ctx, &mm, exchange_id).await?;
+        ApiKeyBmc::delete(&ctx, &mm, apikey_id).await?;
 
         Ok(())
     }
@@ -191,30 +196,30 @@ mod tests {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
         let ctx = Ctx::root_ctx();
-        let fx_exchange_name_prefix = "test_create_ok exchange name - ";
-        let fx_image_id_prefix = "test_create_ok image id - ";
-        let fx_exchange_referral_prefix = "test_create_ok exchange referral - ";
-        let fx_instruction_prefix = "test_create_ok instruction - ";
+        let fx_title_prefix = "test_create_ok apikey title - ";
+        let fx_api_key_value_prefix = "test_create_ok apikey value - ";
+        let fx_api_key_secret_prefix = "test_create_ok apikey secret - ";
 
         for i in 1..=6 {
-            let _exchange_id = ExchangeBmc::create(
+            let _apikey_id = ApiKeyBmc::create(
                 &ctx,
                 &mm,
-                ExchangeForCreate {
-                    exchange_name: Some(format!("{fx_exchange_name_prefix}{:<02}", i)),
-                    image_id: Some(format!("{fx_image_id_prefix}{:<02}", i)),
-                    exchange_referral: Some(format!("{fx_exchange_referral_prefix}{:<02}", i)),
-                    instruction: Some(format!("{fx_instruction_prefix}{:<02}", i)),
+                ApiKeyForCreate {
+                    user_id: ctx.user_id(),
+                    exchange_id: 0,
+                    title: Some(format!("{fx_title_prefix}{:<02}", i)),
+                    api_key_value: Some(format!("{fx_api_key_value_prefix}{:<02}", i)),
+                    api_key_secret: Some(format!("{fx_api_key_secret_prefix}{:<02}", i)),
                 },
             )
                 .await?;
         }
 
         // -- Exec
-        let exchanges = ExchangeBmc::list(
+        let apikeys = ApiKeyBmc::list(
             &ctx,
             &mm,
-            Some(vec![ExchangeFilter {
+            Some(vec![ApiKeyFilter {
                 ..Default::default()
             }]),
             None,
@@ -223,16 +228,16 @@ mod tests {
 
         // -- Check
         // extract the 04, 05, 06 parts of the tiles
-        let num_parts = exchanges
+        let num_parts = apikeys
             .iter()
-            .filter_map(|j| j.exchange_name.as_ref().and_then(|s| s.split("- ").nth(1)))
+            .filter_map(|j| j.title.as_ref().and_then(|s| s.split("- ").nth(1)))
             .collect::<Vec<&str>>();
         assert_eq!(num_parts, &["01", "02", "03", "04", "05", "06"]);
 
         // -- Clean
         // This should delete cascade
-        // TODO delete all exchanges
-        // ExchangeBmc::delete(&ctx, &mm, agent_id).await?;
+        // TODO delete all apikeys
+        // ApiKeyBmc::delete(&ctx, &mm, agent_id).await?;
 
         Ok(())
     }

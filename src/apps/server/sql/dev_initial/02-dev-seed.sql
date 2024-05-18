@@ -76,3 +76,13 @@ INSERT INTO trade_tag (
 ) VALUES
       (1, 0, 1, '2024-05-01 09:30:00+00', 1, '2024-05-01 09:30:00+00'),
       (1, 2, 1, '2024-05-02 09:30:00+00', 1, '2024-05-02 09:30:00+00');
+
+-- Insert fake data into exchange table
+INSERT INTO exchange (
+    id, exchange_name, image_id, exchange_referral, instruction, cid, ctime, mid, mtime
+) VALUES
+      ('0', 'Binance', 'img-binance', 'https://www.binance.com/?ref=123456', 'Follow these steps to set up your Binance account.', 1, '2024-05-01 10:00:00+00', 1, '2024-05-01 10:00:00+00'),
+      ('1', 'Coinbase', 'img-coinbase', 'https://www.coinbase.com/join/123456', 'Follow these steps to set up your Coinbase account.', 2, '2024-05-02 11:00:00+00', 2, '2024-05-02 11:00:00+00'),
+      ('2', 'Kraken', 'img-kraken', 'https://www.kraken.com/sign-up?ref=123456', 'Follow these steps to set up your Kraken account.', 3, '2024-05-03 12:00:00+00', 3, '2024-05-03 12:00:00+00'),
+      ('3', 'Bitfinex', 'img-bitfinex', 'https://www.bitfinex.com/sign-up?ref=123456', 'Follow these steps to set up your Bitfinex account.', 4, '2024-05-04 13:00:00+00', 4, '2024-05-04 13:00:00+00'),
+      ('4', 'Gemini', 'img-gemini', 'https://www.gemini.com/?ref=123456', 'Follow these steps to set up your Gemini account.', 5, '2024-05-05 14:00:00+00', 5, '2024-05-05 14:00:00+00');
