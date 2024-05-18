@@ -26,6 +26,7 @@ const LIST_LIMIT_MAX: i64 = 5000;
 pub enum CommonIden {
 	Id,
 	OwnerId,
+	UserId,
 }
 
 #[derive(Iden)]
@@ -67,4 +68,10 @@ pub trait DbBmc {
 	fn has_owner_id() -> bool {
 		false
 	}
+
+	/// Specifies if the entity table managed by this BMC
+	/// requires user specific access `user_id` column
+	///
+	/// default: false
+	fn requires_user_specific_access() -> bool { false }
 }

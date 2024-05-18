@@ -119,6 +119,8 @@ pub struct TagBmc;
 
 impl DbBmc for TagBmc {
     const TABLE: &'static str = "tag";
+
+    fn requires_user_specific_access() -> bool { true }
 }
 
 // This will generate the `impl TagBmc {...}` with the default CRUD functions.

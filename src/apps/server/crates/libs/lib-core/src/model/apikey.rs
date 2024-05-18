@@ -92,6 +92,8 @@ pub struct ApiKeyBmc;
 
 impl DbBmc for ApiKeyBmc {
     const TABLE: &'static str = "api_key";
+
+    fn requires_user_specific_access() -> bool { true }
 }
 
 // This will generate the `impl ApiKeyBmc {...}` with the default CRUD functions.

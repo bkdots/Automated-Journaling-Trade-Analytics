@@ -84,6 +84,8 @@ pub struct JournalBmc;
 
 impl DbBmc for JournalBmc {
     const TABLE: &'static str = "journal";
+
+    fn requires_user_specific_access() -> bool { true }
 }
 
 // This will generate the `impl JournalBmc {...}` with the default CRUD functions.

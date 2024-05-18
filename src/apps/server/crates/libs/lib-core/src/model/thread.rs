@@ -92,6 +92,8 @@ pub struct ThreadBmc;
 
 impl DbBmc for ThreadBmc {
     const TABLE: &'static str = "thread";
+
+    fn requires_user_specific_access() -> bool { true }
 }
 
 // This will generate the `impl ThreadBmc {...}` with the default CRUD functions.

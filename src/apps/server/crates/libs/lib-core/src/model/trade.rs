@@ -276,6 +276,8 @@ pub struct TradeBmc;
 
 impl DbBmc for TradeBmc {
     const TABLE: &'static str = "trade";
+
+    fn requires_user_specific_access() -> bool { true }
 }
 
 // This will generate the `impl TradeBmc {...}` with the default CRUD functions.

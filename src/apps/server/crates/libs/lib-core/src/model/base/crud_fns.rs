@@ -55,6 +55,10 @@ where
 		.columns(E::field_column_refs())
 		.and_where(Expr::col(CommonIden::Id).eq(id));
 
+	if MC::requires_user_specific_access() {
+		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
+	}
+
 	// -- Exec query
 	let (sql, values) = query.build_sqlx(PostgresQueryBuilder);
 	let sqlx_query = sqlx::query_as_with::<_, E, _>(&sql, values);
@@ -92,6 +96,11 @@ where
 		let cond: Condition = filters.try_into()?;
 		query.cond_where(cond);
 	}
+
+	if MC::requires_user_specific_access() {
+		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
+	}
+
 	// list options
 	let list_options = compute_list_options(list_options)?;
 	list_options.apply_to_sea_query(&mut query);
@@ -127,6 +136,10 @@ where
 		.values(fields)
 		.and_where(Expr::col(CommonIden::Id).eq(id));
 
+	if MC::requires_user_specific_access() {
+		query.and_where(Expr::col(CommonIden::UserId).eq(ctx.user_id()));
+	}
+
 	// -- Execute query
 	let (sql, values) = query.build_sqlx(PostgresQueryBuilder);
 	let sqlx_query = sqlx::query_with(&sql, values);
@@ -152,6 +165,10 @@ where
 	query
 		.from_table(MC::table_ref())
 		.and_where(Expr::col(CommonIden::Id).eq(id));
+
+	if MC::requires_user_specific_access() {
+		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
+	}
 
 	// -- Execute query
 	let (sql, values) = query.build_sqlx(PostgresQueryBuilder);
