@@ -160,7 +160,6 @@ mod tests {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
         let ctx = Ctx::root_ctx();
-        let fx_exchange_id = 0;
         let fx_title = "test_create_ok apikey title";
         let fx_api_key_value = "test_create_ok api key value";
         let fx_api_key_secret = "test_create_ok api key secret";
@@ -197,7 +196,6 @@ mod tests {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
         let ctx = Ctx::root_ctx();
-        let fx_exchange_id = 0;
         let fx_title_prefix = "test_create_ok apikey title - ";
         let fx_api_key_value_prefix = "test_create_ok apikey value - ";
         let fx_api_key_secret_prefix = "test_create_ok apikey secret - ";
