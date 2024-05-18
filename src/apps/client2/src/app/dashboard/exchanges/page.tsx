@@ -12,11 +12,12 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 
 import { ExchangeCard } from '@/components/dashboard/exchanges/exchanges-card';
-import type { Exchange } from '@/components/dashboard/exchanges/exchanges-card';
+import type { Exchange, ApiKey } from '@/components/dashboard/exchanges/exchanges-card';
 import { ExchangesFilters } from '@/components/dashboard/exchanges/exchanges-filters';
 
 export default function Page(): React.JSX.Element {
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -51,7 +52,44 @@ export default function Page(): React.JSX.Element {
       }
     }
 
+    async function fetchApiKeys() {
+      try {
+        const response = await fetch('/api/rpc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: 'list_apikeys',
+            parmas: {
+              // TODO fix id to be dynamic
+              id: 1
+            }
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch apikeys');
+        }
+
+        const data = await response.json();
+        console.log(data.result.data)
+
+        if (data.error) {
+          throw new Error(data.error.message || 'Unknown error');
+        }
+
+        setApiKeys(data.result.data);
+        console.log(apiKeys)
+      } catch (error) {
+        console.error('Error fetching ApiKeys:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchExchanges();
+    fetchApiKeys();
   }, []);
 
   if (loading) {

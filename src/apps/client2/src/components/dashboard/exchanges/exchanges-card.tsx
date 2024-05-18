@@ -17,6 +17,14 @@ export interface Exchange {
   instruction: string;
 }
 
+export interface ApiKey {
+  id: string;
+  exchange_id: string;
+  title: string;
+  api_key_value: string;
+  api_referral: boolean;
+}
+
 export interface ExchangeCardProps {
   exchange: Exchange;
 }
