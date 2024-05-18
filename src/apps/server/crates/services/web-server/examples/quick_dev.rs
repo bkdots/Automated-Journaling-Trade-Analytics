@@ -99,6 +99,20 @@ async fn main() -> Result<()> {
 	let result = req_list_exchanges.await?;
 	result.print().await?;
 
+	// -- Get ApiKey
+	let req_get_apikey = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "get_apikey",
+			"params": {
+				"id": 1
+			}
+		})
+	);
+	let result = req_get_apikey.await?;
+	result.print().await?;
+
 	// -- List ApiKeys
 	let req_list_apikeys = hc.do_post(
 		"/api/rpc",

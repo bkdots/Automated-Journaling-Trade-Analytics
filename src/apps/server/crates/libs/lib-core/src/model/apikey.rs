@@ -94,6 +94,11 @@ impl DbBmc for ApiKeyBmc {
     const TABLE: &'static str = "api_key";
 
     fn requires_user_specific_access() -> bool { true }
+
+    // TODO exclude api_key_secret from requests
+    fn columns_to_exclude() -> Vec<&'static str> {
+        vec!["api_key_secret"]
+    }
 }
 
 // This will generate the `impl ApiKeyBmc {...}` with the default CRUD functions.

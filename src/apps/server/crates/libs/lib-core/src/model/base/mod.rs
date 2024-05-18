@@ -74,4 +74,10 @@ pub trait DbBmc {
 	///
 	/// default: false
 	fn requires_user_specific_access() -> bool { false }
+
+
+	/// Specifies return columns to exclude
+	fn columns_to_exclude() -> Vec<&'static str> {
+		vec![]
+	}
 }

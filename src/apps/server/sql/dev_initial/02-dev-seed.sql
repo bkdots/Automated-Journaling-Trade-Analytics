@@ -88,11 +88,11 @@ INSERT INTO exchange (
 -- Create API keys for demo1 and demo2 user
 -- Binance API Key
 INSERT INTO api_key (
-    user_id, exchange_id, title, api_key_value, api_key_secret, api_referral, cid, ctime, mid, mtime
+    id, user_id, exchange_id, title, api_key_value, api_key_secret, api_referral, cid, ctime, mid, mtime
 ) VALUES
-      (1, 0, 'Binance API Key', 'your_binance_api_key_value', 'your_binance_api_key_secret', false, 1, '2024-05-01 10:00:00+00', 1, '2024-05-01 10:00:00+00'),
-      (1, 1, 'Coinbase API Key', 'your_coinbase_api_key_value', 'your_coinbase_api_key_secret', false, 1, '2024-05-02 11:00:00+00', 1, '2024-05-02 11:00:00+00'),
-      (1, 2, 'Kraken API Key', 'your_kraken_api_key_value', 'your_kraken_api_key_secret', false, 1, '2024-05-03 12:00:00+00', 1, '2024-05-03 12:00:00+00'),
-      (1, 3, 'Bitfinex API Key', 'your_bitfinex_api_key_value', 'your_bitfinex_api_key_secret', false, 1, '2024-05-04 13:00:00+00', 1, '2024-05-04 13:00:00+00'),
-      (2, 0, 'Binance API Key', 'your_binance_api_key_value', 'your_binance_api_key_secret', false, 1, '2024-05-01 10:00:00+00', 1, '2024-05-01 10:00:00+00'),
-      (2, 3, 'Bitfinex API Key', 'your_bitfinex_api_key_value', 'your_bitfinex_api_key_secret', false, 1, '2024-05-04 13:00:00+00', 1, '2024-05-04 13:00:00+00');
+      (0, 1, 0, 'Binance API Key', 'your_binance_api_key_value', 'your_binance_api_key_secret', false, 1, '2024-05-01 10:00:00+00', 1, '2024-05-01 10:00:00+00'),
+      (1, 1, 1, 'Coinbase API Key', 'your_coinbase_api_key_value', 'your_coinbase_api_key_secret', false, 1, '2024-05-02 11:00:00+00', 1, '2024-05-02 11:00:00+00'),
+      (2, 1, 2, 'Kraken API Key', 'your_kraken_api_key_value', 'your_kraken_api_key_secret', false, 1, '2024-05-03 12:00:00+00', 1, '2024-05-03 12:00:00+00'),
+      (4, 1, 3, 'Bitfinex API Key', 'your_bitfinex_api_key_value', 'your_bitfinex_api_key_secret', false, 1, '2024-05-04 13:00:00+00', 1, '2024-05-04 13:00:00+00'),
+      (5, 2, 0, 'Binance API Key', 'your_binance_api_key_value', 'your_binance_api_key_secret', false, 1, '2024-05-01 10:00:00+00', 1, '2024-05-01 10:00:00+00'),
+      (6, 2, 3, 'Bitfinex API Key', 'your_bitfinex_api_key_value', 'your_bitfinex_api_key_secret', false, 1, '2024-05-04 13:00:00+00', 1, '2024-05-04 13:00:00+00');

@@ -55,6 +55,7 @@ where
 		.columns(E::field_column_refs())
 		.and_where(Expr::col(CommonIden::Id).eq(id));
 
+	// Apply user-specific access control if required
 	if MC::requires_user_specific_access() {
 		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
 	}
@@ -97,6 +98,7 @@ where
 		query.cond_where(cond);
 	}
 
+	// Apply user-specific access control if required
 	if MC::requires_user_specific_access() {
 		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
 	}
@@ -136,6 +138,7 @@ where
 		.values(fields)
 		.and_where(Expr::col(CommonIden::Id).eq(id));
 
+	// Apply user-specific access control if required
 	if MC::requires_user_specific_access() {
 		query.and_where(Expr::col(CommonIden::UserId).eq(ctx.user_id()));
 	}
@@ -166,6 +169,7 @@ where
 		.from_table(MC::table_ref())
 		.and_where(Expr::col(CommonIden::Id).eq(id));
 
+	// Apply user-specific access control if requireds
 	if MC::requires_user_specific_access() {
 		query.and_where(Expr::col(CommonIden::UserId).eq(_ctx.user_id()));
 	}
