@@ -289,9 +289,10 @@ CREATE TABLE trade_tag
     -- Composite Primary Key
     trade_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
-    PRIMARY KEY (id, trade_id, tag_id),
+    user_id BIGINT NOT NULL,
+    PRIMARY KEY (id, trade_id, tag_id, user_id),
 
---     -- Foreign Keys
+    -- Foreign Keys
 --     FOREIGN KEY (trade_id) REFERENCES trade(id)
 --         ON DELETE CASCADE,
 --     FOREIGN KEY (tag_id) REFERENCES tag(id)

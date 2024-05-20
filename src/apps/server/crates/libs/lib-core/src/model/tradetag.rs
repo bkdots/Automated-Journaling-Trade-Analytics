@@ -29,6 +29,7 @@ pub struct TradeTag {
     // -- Relations
     pub trade_id: i64,
     pub tag_id: i64,
+    pub user_id: i64,
 
     // -- Timestamps
     // creator user_id and time
@@ -45,18 +46,21 @@ pub struct TradeTag {
 pub struct TradeTagForCreate {
     pub trade_id: i64,
     pub tag_id: i64,
+    pub user_id: i64,
 }
 
 #[derive(Fields, Deserialize, Default)]
 pub struct TradeTagForUpdate {
     pub trade_id: i64,
     pub tag_id: i64,
+    pub user_id: i64,
 }
 
 #[derive(FilterNodes, Deserialize, Default, Debug)]
 pub struct TradeTagFilter {
     pub trade_id: Option<OpValsInt64>,
     pub tag_id: Option<OpValsInt64>,
+    pub user_id: Option<OpValsInt64>,
 
     pub cid: Option<OpValsInt64>,
     #[modql(to_sea_value_fn = "time_to_sea_value")]
@@ -152,6 +156,7 @@ mod tests {
             TradeTagForCreate {
                 trade_id: 1,
                 tag_id: 2,
+                user_id: ctx.user_id(),
             },
         )
             .await?;

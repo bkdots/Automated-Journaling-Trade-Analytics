@@ -70,10 +70,10 @@ INSERT INTO trade (
 
 -- Sample data for the trade_tag table
 INSERT INTO trade_tag (
-    trade_id, tag_id, cid, ctime, mid, mtime
+    trade_id, tag_id, user_id, cid, ctime, mid, mtime
 ) VALUES
-      (1, 0, 1, '2024-05-01 09:30:00+00', 1, '2024-05-01 09:30:00+00'),
-      (1, 2, 1, '2024-05-02 09:30:00+00', 1, '2024-05-02 09:30:00+00');
+      (1, 0, 1, 1, '2024-05-01 09:30:00+00', 1, '2024-05-01 09:30:00+00'),
+      (1, 2, 1, 1, '2024-05-02 09:30:00+00', 1, '2024-05-02 09:30:00+00');
 
 -- Insert fake data into exchange table
 INSERT INTO exchange (
