@@ -124,6 +124,17 @@ async fn main() -> Result<()> {
 	let result = req_list_apikeys.await?;
 	result.print().await?;
 
+	// -- List Trades
+	let req_list_trades = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "list_trades",
+		})
+	);
+	let result = req_list_trades.await?;
+	result.print().await?;
+
 	// -- Logoff
 	let req_logoff = hc.do_post(
 		"/api/logoff",
