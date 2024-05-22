@@ -22,14 +22,59 @@ function noop(): void {
   // do nothing
 }
 
+export enum TradeType {
+  Spot = 'Spot',
+  Option = 'Option',
+  Future = 'Future',
+}
+
+export enum DirectionType {
+  Buy = 'Buy',
+  Sell = 'Sell',
+}
+
+export enum OptionType {
+  Call = 'Call',
+  Put = 'Put',
+}
+
 export interface Trade {
-  id: string;
-  avatar: string;
-  name: string;
-  email: string;
-  address: { city: string; state: string; country: string; street: string };
-  phone: string;
-  createdAt: Date;
+  id: bigint;
+  user_id: bigint;
+  journal_id: bigint;
+
+  trade_type: TradeType;
+  instrument: string;
+  entry_time: string; // Using string to represent ISO 8601 date
+  exit_time: string | null;
+  direction: DirectionType;
+  option_type: OptionType | null;
+  multiplier: number | null;
+  entry_price: number;
+  quantity: number;
+  target_stop_loss: number | null;
+  target_take_profit: number | null;
+  exit_price: number | null;
+  fees: number | null;
+  notes: string | null;
+  highest_price: number | null;
+  lowest_price: number | null;
+  origin_take_profit_hit: boolean | null;
+
+  confidence: number | null;
+  entry_rating: number | null;
+  exit_rating: number | null;
+  execution_rating: number | null;
+  management_rating: number | null;
+  net_profit_loss: number | null;
+  gross_profit_loss: number | null;
+  pnl_percentage: number | null;
+  time_in_trade: string | null; // Using string to represent ISO 8601 date
+
+  cid: bigint;
+  ctime: string; // Using string to represent ISO 8601 date
+  mid: bigint;
+  mtime: string; // Using string to represent ISO 8601 date
 }
 
 interface TradesTableProps {
@@ -98,18 +143,18 @@ export function TradesTable({
                       }}
                     />
                   </TableCell>
-                  <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
+                  {/*<TableCell>*/}
+                  {/*  <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>*/}
+                  {/*    <Avatar src={row.avatar} />*/}
+                  {/*    <Typography variant="subtitle2">{row.name}</Typography>*/}
+                  {/*  </Stack>*/}
+                  {/*</TableCell>*/}
+                  {/*<TableCell>{row.email}</TableCell>*/}
+                  {/*<TableCell>*/}
+                  {/*  {row.address.city}, {row.address.state}, {row.address.country}*/}
+                  {/*</TableCell>*/}
+                  {/*<TableCell>{row.phone}</TableCell>*/}
+                  {/*<TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>*/}
                 </TableRow>
               );
             })}
