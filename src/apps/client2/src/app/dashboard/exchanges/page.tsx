@@ -61,10 +61,6 @@ export default function Page(): React.JSX.Element {
           },
           body: JSON.stringify({
             method: 'list_apikeys',
-            parmas: {
-              // TODO fix id to be dynamic
-              id: 1
-            }
           }),
         });
 
@@ -79,8 +75,16 @@ export default function Page(): React.JSX.Element {
           throw new Error(data.error.message || 'Unknown error');
         }
 
-        setApiKeys(data.result.data);
-        console.log(apiKeys)
+        const apiKeys: ApiKey[] = data.result.data.map((item: any) => ({
+          id: item.id,
+          exchange_id: item.exchange_id,
+          title: item.title,
+          api_key_value: item.api_key_value,
+          api_referral: item.api_referral,
+        }));
+
+        setApiKeys(apiKeys);
+        console.log('Processed ApiKeys:', apiKeys);
       } catch (error) {
         console.error('Error fetching ApiKeys:', error);
       } finally {
