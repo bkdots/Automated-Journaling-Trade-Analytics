@@ -118,11 +118,18 @@ export function TradesTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Signed Up</TableCell>
+              <TableCell>Side</TableCell>
+              <TableCell>Instrument</TableCell>
+              <TableCell>Entry Date</TableCell>
+              <TableCell>Close Date</TableCell>
+              <TableCell>Trade Type</TableCell>
+              <TableCell>Size</TableCell>
+              <TableCell>Entry</TableCell>
+              <TableCell>Exit</TableCell>
+              <TableCell>Duration</TableCell>
+              <TableCell>Result</TableCell>
+              <TableCell>Return ($)</TableCell>
+              <TableCell>Return (%)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
