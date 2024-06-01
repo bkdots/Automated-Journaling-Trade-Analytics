@@ -289,6 +289,55 @@ generate_common_bmc_fns!(
 	Filter: TradeFilter
 );
 
+// Add the function to get trades with tags
+pub async fn get_trades_with_tags(pool: &PgPool) -> Result<Vec<Trade>, sqlx::Error> {
+    let query: SelectStatement = Query::select()
+        .columns(vec![
+            (trade::Table, trade::Id),
+            (trade::Table, trade::UserId),
+            (trade::Table, trade::JournalId),
+            // ... other trade columns ...
+            (tag::Table, tag::Id),
+            (tag::Table, tag::UserId),
+            (tag::Table, tag::TagName),
+            (tag::Table, tag::TagType),
+            (tag::Table, tag::Description),
+            (tag::Table, tag::Cid),
+            (tag::Table, tag::Ctime),
+            (tag::Table, tag::Mid),
+            (tag::Table, tag::Mtime),
+        ])
+        .from(trade::Table)
+        .left_join(trade_tag::Table, Expr::col((trade::Table, trade::Id)).equals((trade_tag::Table, trade_tag::TradeId)))
+        .left_join(tag::Table, Expr::col((trade_tag::Table, trade_tag::TagId)).equals((tag::Table, tag::Id)))
+        .to_owned();
+
+    let (sql, values) = query.build_sqlx(PostgresQueryBuilder);
+    let rows = sqlx::query_as::<_, (Trade, Option<Tag>)>(&sql)
+        .fetch_all(pool)
+        .await?;
+
+    // Aggregate tags for each trade
+    let mut trades_map = std::collections::HashMap::new();
+    for (mut trade, tag) in rows {
+        if let Some(tag) = tag {
+            trades_map.entry(trade.id).or_insert_with(|| {
+                trade.tags = vec![tag];
+                trade
+            }).tags.push(tag);
+        } else {
+            trades_map.entry(trade.id).or_insert(trade);
+        }
+    }
+
+    Ok(trades_map.into_values().collect())
+}
+
+pub async fn list_trades_with_tags(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Trade>> {
+    let pool = mm.dbx().clone();
+    get_trades_with_tags(&pool).await.map_err(|e| Error::DbxError { source: e })
+}
+
 // Additional JournalBmc methods to manage the `JournalMsg` constructs.
 // impl JournalBmc {
 /// Add a `Trade` to a `Journal`
